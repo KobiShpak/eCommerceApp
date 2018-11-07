@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/userImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/ic_launcher_round"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/fullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Full Name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userImageView" />
+    <EditText
+        android:id="@+id/emailAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        app:layout_constraintStart_toStartOf="@+id/fullName"
+        app:layout_constraintTop_toBottomOf="@+id/fullName" />
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="phone"
+        app:layout_constraintStart_toStartOf="@+id/emailAddress"
+        app:layout_constraintTop_toBottomOf="@+id/emailAddress" />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintStart_toStartOf="@+id/phoneNumber"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+    <TextView
+        android:id="@+id/genderTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Gender"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+    <RadioGroup
+        android:id="@+id/genderRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/genderTextView"
+        app:layout_constraintTop_toBottomOf="@+id/genderTextView">
+        <RadioButton
+            android:id="@+id/maleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Male"
+            app:layout_constraintStart_toStartOf="@+id/genderTextView"
+            app:layout_constraintTop_toBottomOf="@+id/genderTextView" />
+        <RadioButton
+            android:id="@+id/femaleRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            app:layout_constraintStart_toEndOf="@+id/maleRadioButton"
+            app:layout_constraintTop_toBottomOf="@+id/genderTextView" />
+        <RadioButton
+            android:id="@+id/otherRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            app:layout_constraintStart_toEndOf="@+id/femaleRadioButton"
+            app:layout_constraintTop_toBottomOf="@+id/genderTextView" />
+    </RadioGroup>
+    <EditText
+        android:id="@+id/birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Birthday DD/MM/YYYY"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="@+id/genderRadioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>
