@@ -23,7 +23,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="51" />
+                                                <entry key="scalingPercent" value="83" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,9 +35,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="21b6e9" />
-                                      <entry key="foregroundImage" value="C:\Users\Kobi Shpak\Downloads\kisspng-web-development-e-commerce-logo-electronic-busines-ecommerce-5ad142afc13966.5141508215236635357915.png" />
-                                      <entry key="legacyIconShape" value="CIRCLE" />
+                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="foregroundImage" value="C:\Users\erana\Downloads\ecommerce_icon.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

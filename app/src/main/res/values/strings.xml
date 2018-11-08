@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">HW01</string>
+    <string name="user_image">User Image</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
+    <string name="birthday_dd_mm_yyyy">Birthday DD/MM/YYYY</string>
+    <string name="submit">Submit</string>
+    <string name="splash_image">Splash Image</string>
+
+    <string name="error_invalid_register_password">Password should be at least 6 digit length, and should contain 1 UpperCase letter, 1 LowerCase letter, 1Number, and 1 special character</string>
+    <string name="error_invalid_email">Invalid email. email should contain "@" and ".com"</string>
+    <string name="error_invalid_phone">Invalid phone number. must be 10 digits</string>
 </resources>
