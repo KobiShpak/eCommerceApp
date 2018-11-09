@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".enterUserInfoActivity"></activity>
+        <activity android:name=".EnterUserInfoActivity" />
+        <activity android:name=".DisplayUserInfoActivity"></activity>
     </application>
 
 </manifest>

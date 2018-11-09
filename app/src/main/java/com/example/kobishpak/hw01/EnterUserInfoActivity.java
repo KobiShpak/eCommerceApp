@@ -1,31 +1,41 @@
 package com.example.kobishpak.hw01;
 
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
-public class enterUserInfoActivity extends AppCompatActivity {
+public class EnterUserInfoActivity extends AppCompatActivity {
 
-    private final int RADIO_BUTTON_NOT_CHECKED = -1;
+    private static final int RADIO_BUTTON_NOT_CHECKED = -1;
+    public static final int GET_FROM_GALLERY = 2;
 
-    private ImageView m_UserImageView;
     private EditText m_FullNameEditText;
     private EditText m_EmailEditText;
     private EditText m_PhoneNumberEditText;
     private EditText m_PasswordEditText;
     private RadioGroup m_GenderRadioButton;
     private EditText m_DateEditText;
+    private Button m_ImageUploadButton;
     private Button m_SubmitButton;
 
     private boolean doubleBackToExitPressedOnce = false;
+    private boolean isImageUploaded = false;
+    private Bitmap userImage = null;
 
 
     @Override
@@ -42,18 +52,30 @@ public class enterUserInfoActivity extends AppCompatActivity {
                 OnClickSubmitButton();
             }
         });
+
+        m_ImageUploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                OnUserImageClick();
+            }
+        });
     }
 
-    private void InitialiseInstances()
-    {
-        m_UserImageView = findViewById(R.id.userImageView);
+    private void OnUserImageClick() {
+
+        startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+    }
+
+    private void InitialiseInstances() {
+        m_ImageUploadButton = findViewById(R.id.buttonUpload);
         m_FullNameEditText = findViewById(R.id.fullName);
         m_EmailEditText = findViewById(R.id.emailAddress);
         m_PhoneNumberEditText = findViewById(R.id.phoneNumber);
         m_PasswordEditText = findViewById(R.id.password);
         m_GenderRadioButton = findViewById(R.id.genderRadioGroup);
         m_DateEditText = findViewById(R.id.birthday);
-        m_SubmitButton = findViewById(R.id.submit);
+        m_SubmitButton = findViewById(R.id.buttonSubmit);
     }
 
     private void OnClickSubmitButton(){
@@ -75,7 +97,7 @@ public class enterUserInfoActivity extends AppCompatActivity {
         boolean cancel5 = false;
         View focusView = null;
 
-        if (m_UserImageView.getDrawable() == null)
+        if (!isImageUploaded)
         {
             Toast.makeText(this, "Please add user image", Toast.LENGTH_SHORT).show();
             cancel1 = true;
@@ -143,10 +165,22 @@ public class enterUserInfoActivity extends AppCompatActivity {
     }
 
     private void NextActivity(){
-        Intent intent = new Intent("");
+        Intent intent = new Intent(EnterUserInfoActivity.this, DisplayUserInfoActivity.class);
 
-        // TODO: add the new activity
-        // TODO: add extras to next screen?
+        int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
+        RadioButton radioButton = findViewById(selectedId);
+        intent.putExtra("userGender", radioButton.getText().toString());
+
+        intent.putExtra("userImage", userImage);
+        intent.putExtra("userEmail", m_EmailEditText.getText().toString());
+        intent.putExtra("userPassword", m_PasswordEditText.getText().toString());
+        intent.putExtra("userFullName", m_FullNameEditText.getText().toString());
+        intent.putExtra("userPhoneNumber", m_PhoneNumberEditText.getText().toString());
+        intent.putExtra("date", m_DateEditText.getText().toString());
+
+        // TODO add bundle
+
+        startActivity(intent, new Bundle());
         startActivity(intent);
         finish();
     }
@@ -168,5 +202,32 @@ public class enterUserInfoActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce=false;
             }
         }, 2000);
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                assert imageUri != null;
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                userImage = BitmapFactory.decodeStream(imageStream);
+
+                if (userImage != null){
+                    isImageUploaded = true;
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                isImageUploaded = false;
+            }
+
+        }else {
+            Toast.makeText(EnterUserInfoActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+            isImageUploaded = false;
+
+        }
     }
 }
