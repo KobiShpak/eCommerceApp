@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,7 +45,12 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_user_info);
 
         InitialiseInstances();
-        
+
+        editTextFocusChangeListener(m_EmailEditText);
+        editTextFocusChangeListener(m_DateEditText);
+        editTextFocusChangeListener(m_PasswordEditText);
+        editTextFocusChangeListener(m_PhoneNumberEditText);
+
         m_SubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +64,22 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 OnUserImageClick();
+            }
+        });
+    }
+
+    private void editTextFocusChangeListener(View editText)
+    {
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(!hasFocus){
+                    if (!isEmailValid(((EditText)v).getText().toString()))
+                    {
+                        //TODO: make a general function for error strings and fix this bug
+                        ((EditText)v).setError(getString(R.string.error_invalid_email));
+                    }
+                }
             }
         });
     }
@@ -113,6 +135,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         if (!isEmailValid(email))
         {
             m_EmailEditText.setError(getString(R.string.error_invalid_email));
+            m_EmailEditText.setBackgroundColor(ContextCompat.getColor(this,R.color.colorEditTextError));
             focusView = m_EmailEditText;
             cancel3 = true;
         }
@@ -141,7 +164,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        return (email.contains("@") && email.contains(".com") &&  email.length() > 10 && email.length() < 30);
+        return ( (email.isEmpty()) || (email.contains("@") && email.contains(".com") &&  email.length() > 10 && email.length() < 30));
     }
 
     private boolean isPasswordValid(String password) {
