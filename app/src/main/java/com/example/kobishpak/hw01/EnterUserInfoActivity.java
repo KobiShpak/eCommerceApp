@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
+import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.regex.Pattern;
@@ -46,15 +46,57 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
         InitialiseInstances();
 
-        editTextFocusChangeListener(m_EmailEditText);
-        editTextFocusChangeListener(m_DateEditText);
-        editTextFocusChangeListener(m_PasswordEditText);
-        editTextFocusChangeListener(m_PhoneNumberEditText);
+        m_FullNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(!hasFocus){
+                    if (((EditText)v).getText().toString().isEmpty())
+                    {
+                        ((EditText)v).setError(getString(R.string.error_invalid_name));
+                    }
+                }
+            }
+        });
+
+        m_EmailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(!hasFocus){
+                    if (!isEmailValid(((EditText)v).getText().toString()))
+                    {
+                        ((EditText)v).setError(getString(R.string.error_invalid_email));
+                    }
+                }
+            }
+        });
+
+        m_PhoneNumberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(!hasFocus){
+                    if (!isPhoneNumberValid(((EditText)v).getText().toString()))
+                    {
+                        ((EditText)v).setError(getString(R.string.error_invalid_phone));
+                    }
+                }
+            }
+        });
+
+        m_DateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(!hasFocus){
+                    if (!isDateValid(((EditText)v).getText().toString()))
+                    {
+                        ((EditText)v).setError(getString(R.string.error_invalid_date));
+                    }
+                }
+            }
+        });
 
         m_SubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 OnClickSubmitButton();
             }
         });
@@ -62,24 +104,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         m_ImageUploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 OnUserImageClick();
-            }
-        });
-    }
-
-    private void editTextFocusChangeListener(View editText)
-    {
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus){
-                if(!hasFocus){
-                    if (!isEmailValid(((EditText)v).getText().toString()))
-                    {
-                        //TODO: make a general function for error strings and fix this bug
-                        ((EditText)v).setError(getString(R.string.error_invalid_email));
-                    }
-                }
             }
         });
     }
@@ -103,20 +128,27 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private void OnClickSubmitButton(){
 
         // Reset errors displayed in the form.
+        m_FullNameEditText.setError(null);
         m_EmailEditText.setError(null);
         m_PasswordEditText.setError(null);
         m_PhoneNumberEditText.setError(null);
+        m_DateEditText.setError(null);
 
         // Get the texts
         String email = m_EmailEditText.getText().toString();
+        String fullName = m_FullNameEditText.getText().toString();
         String password = m_PasswordEditText.getText().toString();
         String phoneNumber = m_PhoneNumberEditText.getText().toString();
+        String birthday = m_DateEditText.getText().toString();
 
         boolean cancel1 = false;
         boolean cancel2 = false;
         boolean cancel3 = false;
         boolean cancel4 = false;
         boolean cancel5 = false;
+        boolean cancel6 = false;
+        boolean cancel7 = false;
+
         View focusView = null;
 
         if (!isImageUploaded)
@@ -125,11 +157,18 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             cancel1 = true;
         }
 
+        if (fullName.isEmpty())
+        {
+            Toast.makeText(this, R.string.error_invalid_name, Toast.LENGTH_SHORT);
+            focusView = m_FullNameEditText;
+            cancel2 = true;
+        }
+
         if (!isPasswordValid(password))
         {
             m_PasswordEditText.setError(getString(R.string.error_invalid_register_password));
             focusView = m_PasswordEditText;
-            cancel2 = true;
+            cancel3 = true;
         }
 
         if (!isEmailValid(email))
@@ -137,23 +176,29 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             m_EmailEditText.setError(getString(R.string.error_invalid_email));
             m_EmailEditText.setBackgroundColor(ContextCompat.getColor(this,R.color.colorEditTextError));
             focusView = m_EmailEditText;
-            cancel3 = true;
+            cancel4 = true;
         }
 
         if (!isPhoneNumberValid((phoneNumber)))
         {
             m_PhoneNumberEditText.setError(getString(R.string.error_invalid_phone));
             focusView = m_PhoneNumberEditText;
-            cancel4 = true;
+            cancel5 = true;
         }
 
         if (m_GenderRadioButton.getCheckedRadioButtonId() == RADIO_BUTTON_NOT_CHECKED)
         {
             Toast.makeText(this, "Gender is not checked !", Toast.LENGTH_SHORT).show();
-            cancel5 = true;
+            cancel6 = true;
         }
 
-        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5) {
+        if (!isDateValid(birthday))
+        {
+            m_DateEditText.setError(getString(R.string.error_invalid_date));
+            cancel7 = true;
+        }
+
+        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7) {
             // There was an error
             if (focusView != null) {
                 focusView.requestFocus();
@@ -161,6 +206,14 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         } else {
             NextActivity();
         }
+    }
+
+    private boolean isDateValid(String date){
+        String dateRegEx="^[0-3]{1}[0-9]{1}/[0-1]{1}[1-2]{1}/[1-9]{1}[0-9]{3}$";
+        Pattern pattern = Pattern.compile(dateRegEx);
+        Matcher matcher = pattern.matcher(date);
+
+        return matcher.matches();
     }
 
     private boolean isEmailValid(String email) {
@@ -193,7 +246,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
         intent.putExtra("userGender", radioButton.getText().toString());
-
         intent.putExtra("userImage", userImage);
         intent.putExtra("userEmail", m_EmailEditText.getText().toString());
         intent.putExtra("userPassword", m_PasswordEditText.getText().toString());

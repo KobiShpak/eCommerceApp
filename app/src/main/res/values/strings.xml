@@ -14,6 +14,8 @@
     <string name="splash_image">Splash Image</string>
 
     <string name="error_invalid_register_password">Password should be at least 6 digit length, and should contain 1 UpperCase letter, 1 LowerCase letter, 1Number, and 1 special character</string>
+    <string name="error_invalid_name">Full Name cannot be empty.</string>
+    <string name="error_invalid_date">Invalid date. Date format should be DD/MM/YYYY.</string>
     <string name="error_invalid_email">Invalid email. email should contain "@" and ".com"</string>
     <string name="error_invalid_phone">Invalid phone number. must be 10 digits</string>
     <string name="upload_image">Upload Image</string>
