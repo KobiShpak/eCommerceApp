@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private EditText m_DateEditText;
     private Button m_ImageUploadButton;
     private Button m_SubmitButton;
+    private ImageView m_UserImageView;
+    private Uri m_ImageUri;
 
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
@@ -123,6 +126,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         m_GenderRadioButton = findViewById(R.id.genderRadioGroup);
         m_DateEditText = findViewById(R.id.birthday);
         m_SubmitButton = findViewById(R.id.buttonSubmit);
+        m_UserImageView = findViewById(R.id.userImageView);
     }
 
     private void OnClickSubmitButton(){
@@ -246,7 +250,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
         intent.putExtra("userGender", radioButton.getText().toString());
-        intent.putExtra("userImage", userImage);
+        intent.putExtra("userImage", m_ImageUri);
         intent.putExtra("userEmail", m_EmailEditText.getText().toString());
         intent.putExtra("userPassword", m_PasswordEditText.getText().toString());
         intent.putExtra("userFullName", m_FullNameEditText.getText().toString());
@@ -286,12 +290,12 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             try {
-                final Uri imageUri = data.getData();
-                assert imageUri != null;
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                userImage = BitmapFactory.decodeStream(imageStream);
+                m_ImageUri = data.getData();
+                assert m_ImageUri != null;
+                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri);// not final
+                m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
 
-                if (userImage != null){
+                if (m_UserImageView != null){
                     isImageUploaded = true;
                 }
             } catch (FileNotFoundException e) {

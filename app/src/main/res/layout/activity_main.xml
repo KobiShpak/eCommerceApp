@@ -12,23 +12,23 @@
         android:id="@+id/imageView"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="15dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/splash_image"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
 
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher_foreground"
         tools:srcCompat="@tools:sample/avatars[3]" />
 
     <TextView
+        android:lines="4"
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="30dp"
+        android:text="Rivka Ramaty\nKobi Shpak\nEran Atia\nDaniel Arami"
+        tools:layout_marginTop="20dp" />
 </LinearLayout>
