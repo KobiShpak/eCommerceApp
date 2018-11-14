@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DisplayUserInfoActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".DisplayUserInfoActivity">
 
     <TextView
         android:id="@+id/textViewHeadline"
@@ -18,13 +18,18 @@
         tools:layout_editor_absoluteX="189dp"
         tools:layout_editor_absoluteY="41dp" />
 
+
     <ImageView
-        android:id="@+id/imageViewUserImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:id="@+id/userImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/ic_launcher"
+        android:baselineAligned="false"
         android:contentDescription="@string/user_image"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewUserInfo"

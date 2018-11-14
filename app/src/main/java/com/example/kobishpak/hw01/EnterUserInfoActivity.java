@@ -250,7 +250,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
         intent.putExtra("userGender", radioButton.getText().toString());
-        intent.putExtra("userImage", m_ImageUri);
+        intent.putExtra("userImage", m_ImageUri.toString());
         intent.putExtra("userEmail", m_EmailEditText.getText().toString());
         intent.putExtra("userPassword", m_PasswordEditText.getText().toString());
         intent.putExtra("userFullName", m_FullNameEditText.getText().toString());
