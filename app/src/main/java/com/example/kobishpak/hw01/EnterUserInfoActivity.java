@@ -85,6 +85,18 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             }
         });
 
+        m_PasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if(!hasFocus){
+                    if (!isDateValid(((EditText)v).getText().toString()))
+                    {
+                        ((EditText)v).setError(getString(R.string.error_invalid_register_password));
+                    }
+                }
+            }
+        });
+
         m_DateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
@@ -178,7 +190,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         if (!isEmailValid(email))
         {
             m_EmailEditText.setError(getString(R.string.error_invalid_email));
-            m_EmailEditText.setBackgroundColor(ContextCompat.getColor(this,R.color.colorEditTextError));
             focusView = m_EmailEditText;
             cancel4 = true;
         }
@@ -199,6 +210,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         if (!isDateValid(birthday))
         {
             m_DateEditText.setError(getString(R.string.error_invalid_date));
+            focusView = m_DateEditText;
             cancel7 = true;
         }
 
@@ -213,7 +225,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private boolean isDateValid(String date){
-        String dateRegEx="^[0-3]{1}[0-9]{1}/[0-1]{1}[1-2]{1}/[1-9]{1}[0-9]{3}$";
+        // DD/MM/YYYY
+        String dateRegEx="^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$";
         Pattern pattern = Pattern.compile(dateRegEx);
         Matcher matcher = pattern.matcher(date);
 
@@ -221,27 +234,34 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        return ( (email.isEmpty()) || (email.contains("@") && email.contains(".com") &&  email.length() > 10 && email.length() < 30));
+        String dateRegEx="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$";
+        Pattern pattern = Pattern.compile(dateRegEx);
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches();
     }
 
     private boolean isPasswordValid(String password) {
+        // Password must be between 4 and 8 digits long and include at least one numeric digit.
+        String dateRegEx="^(?=.*\\d).{4,8}$";
+        Pattern pattern = Pattern.compile(dateRegEx);
+        Matcher matcher = pattern.matcher(password);
 
-        Pattern spacialCharPatten = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
-        Pattern UpperCasePatten = Pattern.compile("[A-Z ]");
-        Pattern lowerCasePatten = Pattern.compile("[a-z ]");
-        Pattern digitCasePatten = Pattern.compile("[0-9 ]");
-
-        // Means that password has to be with at least 1 Lowercase letter, 1 Uppercase, 1 number, and on special char
-
-        return (password.length() > 5 && password.length() < 18 &&
-                spacialCharPatten.matcher(password).find() && UpperCasePatten.matcher(password).find()
-                && lowerCasePatten.matcher(password).find() && digitCasePatten.matcher(password).find());
+        return matcher.matches();
     }
 
     private boolean isPhoneNumberValid(String phoneNumber) {
-        Pattern digitCasePatten = Pattern.compile("[0-9 ]");
+        // Matches: (123) 456 7899
+        //(123).456.7899
+        //(123)-456-7899
+        //123-456-7899
+        //123 456 7899
+        //1234567899
+        String dateRegEx="^/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/$";
+        Pattern pattern = Pattern.compile(dateRegEx);
+        Matcher matcher = pattern.matcher(phoneNumber);
 
-        return (digitCasePatten.matcher(phoneNumber).find() && phoneNumber.length() == 10);
+        return matcher.matches();
     }
 
     private void NextActivity(){
