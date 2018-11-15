@@ -89,7 +89,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
                 if(!hasFocus){
-                    if (!isDateValid(((EditText)v).getText().toString()))
+                    if (!isPasswordValid(((EditText)v).getText().toString()))
                     {
                         ((EditText)v).setError(getString(R.string.error_invalid_register_password));
                     }
@@ -226,16 +226,16 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private boolean isDateValid(String date){
         // DD/MM/YYYY
-        String dateRegEx="^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$";
-        Pattern pattern = Pattern.compile(dateRegEx);
+        String regEx="^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$";
+        Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(date);
 
         return matcher.matches();
     }
 
     private boolean isEmailValid(String email) {
-        String dateRegEx="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$";
-        Pattern pattern = Pattern.compile(dateRegEx);
+        String regEx="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+        Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
@@ -243,8 +243,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         // Password must be between 4 and 8 digits long and include at least one numeric digit.
-        String dateRegEx="^(?=.*\\d).{4,8}$";
-        Pattern pattern = Pattern.compile(dateRegEx);
+        String regEx="^(?=.*[0-9]).{4,8}$";
+        Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(password);
 
         return matcher.matches();
@@ -257,8 +257,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         //123-456-7899
         //123 456 7899
         //1234567899
-        String dateRegEx="^/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/$";
-        Pattern pattern = Pattern.compile(dateRegEx);
+        String regEx="^\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})$";
+        Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(phoneNumber);
 
         return matcher.matches();
