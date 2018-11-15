@@ -29,6 +29,7 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
         m_DialButton = (Button) findViewById(R.id.buttonDial);
+        m_SendMailButton = (Button) findViewById(R.id.buttonSendMail);
         m_UserImageView = (ImageView) findViewById(R.id.userImageView);
         try {
             Uri imageUri = Uri.parse((String) bundle.get("userImage"));
@@ -46,6 +47,22 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + bundle.get("userPhoneNumber")));
                 startActivity(intent);
+            }
+        });
+
+        m_SendMailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:" + (String)bundle.get("userEmail") + "?subject=" + "" + "&body=" + "");
+                intent.setData(data);
+                startActivity(intent);
+                /*Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { (String)bundle.get("userEmail") });
+                intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
+                intent.putExtra(Intent.EXTRA_TEXT, "mail body");
+                startActivity(Intent.createChooser(intent, ""));*/
             }
         });
 
