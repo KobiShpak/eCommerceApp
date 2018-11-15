@@ -125,7 +125,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private void OnUserImageClick() {
-
         startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
     }
 
@@ -280,8 +279,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         // TODO add bundle
 
         startActivity(intent, new Bundle());
-        startActivity(intent);
-        finish();
     }
 
     @Override
@@ -306,7 +303,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-
 
         if (resultCode == RESULT_OK) {
             try {

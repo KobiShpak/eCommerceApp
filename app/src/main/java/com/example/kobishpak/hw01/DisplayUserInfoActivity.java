@@ -57,12 +57,6 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
                 Uri data = Uri.parse("mailto:" + (String)bundle.get("userEmail") + "?subject=" + "" + "&body=" + "");
                 intent.setData(data);
                 startActivity(intent);
-                /*Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("plain/text");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { (String)bundle.get("userEmail") });
-                intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
-                intent.putExtra(Intent.EXTRA_TEXT, "mail body");
-                startActivity(Intent.createChooser(intent, ""));*/
             }
         });
 
