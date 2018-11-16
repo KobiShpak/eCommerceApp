@@ -2,11 +2,9 @@ package com.example.kobishpak.hw01;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,12 +33,11 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private Button m_ImageUploadButton;
     private Button m_SubmitButton;
     private ImageView m_UserImageView;
-    private Uri m_ImageUri;
+    private Uri m_ImageUri = null;
+    private boolean m_IsImageValid = false;
 
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
-    private Bitmap userImage = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,10 +211,14 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             cancel7 = true;
         }
 
-        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7) {
+        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7 || !m_IsImageValid) {
             // There was an error
             if (focusView != null) {
                 focusView.requestFocus();
+            }
+            if(!m_IsImageValid && isImageUploaded)
+            {
+                Toast.makeText(this,"Please choose .jpg, .png or .bmp image" , Toast.LENGTH_SHORT).show();
             }
         } else {
             NextActivity();
@@ -323,6 +324,13 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
                 if (m_UserImageView != null){
                     isImageUploaded = true;
+                }
+
+                if (m_ImageUri.toString().endsWith(".jpg") || m_ImageUri.toString().endsWith(".png") || m_ImageUri.toString().endsWith(".bmp")) {
+                    m_IsImageValid = true;// chosen file is a valid image
+                }
+                else {
+                    m_IsImageValid = false;
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
