@@ -1,6 +1,7 @@
 package com.example.kobishpak.hw01;
 
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -123,7 +125,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private void OnUserImageClick() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-
     }
 
     private void InitialiseInstances() {
@@ -240,7 +241,13 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(date);
 
-        return matcher.matches();
+        int year = 0;
+
+        if (date.length() == 10) {
+            year = Integer.parseInt(date.substring(6));
+        }
+
+        return matcher.matches() && year >= 1900 && year <= 2018;
     }
 
     private boolean isEmailValid(String email) {
@@ -279,6 +286,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
         int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
+
         intent.putExtra("userGender", radioButton.getText().toString());
         intent.putExtra("userImage", m_ImageUri.toString());
         intent.putExtra("userEmail", m_EmailEditText.getText().toString());
@@ -286,8 +294,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         intent.putExtra("userFullName", m_FullNameEditText.getText().toString());
         intent.putExtra("userPhoneNumber", m_PhoneNumberEditText.getText().toString());
         intent.putExtra("date", m_DateEditText.getText().toString());
-
-        // TODO add bundle
 
         startActivity(intent, new Bundle());
     }
@@ -319,7 +325,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             try {
                 m_ImageUri = data.getData();
                 assert m_ImageUri != null;
-                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri);// not final
+                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri); // not final
                 m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
 
                 if (m_UserImageView != null){
@@ -327,12 +333,14 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                     this.m_UserImageView.setBackground(null);
                 }
 
-                if (m_ImageUri.toString().endsWith(".jpg") || m_ImageUri.toString().endsWith(".png") || m_ImageUri.toString().endsWith(".bmp")) {
-                    m_IsImageValid = true;// chosen file is a valid image
+                ContentResolver cR = getApplicationContext().getContentResolver();
+                String type = cR.getType(m_ImageUri);
+
+                // chosen file is a valid image
+                if (type != null) {
+                    m_IsImageValid = type.equals("image/jpeg") || type.equals("image/jpg") || type.equals("image/bmp") || type.equals("image/png");
                 }
-                else {
-                    m_IsImageValid = false;
-                }
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 isImageUploaded = false;

@@ -1,77 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DisplayUserInfoActivity"
-    tools:layout_editor_absoluteY="81dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textViewHeadline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="14dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="0.01"
         android:text="@string/user_details"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/userImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp" />
 
 
     <ImageView
         android:id="@+id/userImageView"
-        android:layout_width="111dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="13dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/user_image"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/textViewUserInfo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewHeadline" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textViewUserInfo"
-        android:layout_width="361dp"
-        android:layout_height="157dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="3"
         android:lineSpacingExtra="5sp"
-        android:textAlignment="textStart"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:textSize="18sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDial"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userImageView" />
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/buttonDial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="19dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/dial"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSendMail"
-        app:layout_constraintStart_toStartOf="@+id/buttonSendMail"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserInfo" />
+        android:layout_gravity="center"
+        android:layout_weight="0.01"/>
 
     <Button
         android:id="@+id/buttonSendMail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="0.01"
         android:background="@color/colorPrimary"
         android:text="@string/send_mail"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDial" />
-</android.support.constraint.ConstraintLayout>
+        android:textColor="@android:color/white" />
+</LinearLayout>

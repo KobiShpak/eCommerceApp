@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,103 +11,85 @@
         android:id="@+id/userImageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:background="@mipmap/ic_launcher"
-        android:contentDescription="@string/user_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="5dp"
+        android:background="@mipmap/ic_launcher_foreground"
+        android:contentDescription="@string/user_image" />
 
     <EditText
         android:id="@+id/fullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/full_name"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userImageView"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/emailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
-        app:layout_constraintStart_toStartOf="@+id/fullName"
-        app:layout_constraintTop_toBottomOf="@+id/fullName"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/phoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/phone_number"
         android:inputType="phone"
-        app:layout_constraintStart_toStartOf="@+id/emailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/emailAddress"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/phoneNumber"
-        app:layout_constraintTop_toBottomOf="@+id/phoneNumber"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <TextView
         android:id="@+id/genderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/gender"
-        app:layout_constraintStart_toStartOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        android:text="@string/gender" />
 
     <RadioGroup
         android:id="@+id/genderRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/genderTextView"
-        app:layout_constraintTop_toBottomOf="@+id/genderTextView">
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/maleRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/male"
-            app:layout_constraintStart_toStartOf="@+id/genderTextView"
-            app:layout_constraintTop_toBottomOf="@+id/genderTextView" />
+            android:text="@string/male" />
 
         <RadioButton
             android:id="@+id/femaleRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/female"
-            app:layout_constraintStart_toEndOf="@+id/maleRadioButton"
-            app:layout_constraintTop_toBottomOf="@+id/genderTextView" />
+            android:text="@string/female" />
 
         <RadioButton
             android:id="@+id/otherRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/other"
-            app:layout_constraintStart_toEndOf="@+id/femaleRadioButton"
-            app:layout_constraintTop_toBottomOf="@+id/genderTextView" />
+            android:text="@string/other" />
     </RadioGroup>
 
     <EditText
@@ -118,10 +99,9 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="@string/birthday_dd_mm_yyyy"
+        android:importantForAutofill="no"
         android:inputType="date"
-        app:layout_constraintStart_toStartOf="@+id/genderRadioGroup"
-        app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup"
-        android:importantForAutofill="no" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/buttonUpload"
@@ -139,8 +119,5 @@
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"
         android:text="@string/submit"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textColor="@android:color/white" />
 </LinearLayout>
