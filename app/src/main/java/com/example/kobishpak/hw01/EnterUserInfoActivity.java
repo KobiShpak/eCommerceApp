@@ -163,6 +163,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         boolean cancel5 = false;
         boolean cancel6 = false;
         boolean cancel7 = false;
+        boolean cancel8 = false;
 
         View focusView = null;
 
@@ -170,6 +171,19 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Please add user image", Toast.LENGTH_SHORT).show();
             cancel1 = true;
+        }
+        else
+        {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(m_ImageUri.toString(), options);
+            if (options.outWidth != -1 && options.outHeight != -1) {
+                // This is an image file.
+            }
+            else {
+                Toast.makeText(this, "Please choose an image", Toast.LENGTH_SHORT).show();
+                cancel8 = true;
+            }
         }
 
         if (!isFullNameValid(fullName))
@@ -213,7 +227,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             cancel7 = true;
         }
 
-        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7) {
+        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7 || cancel8) {
             // There was an error
             if (focusView != null) {
                 focusView.requestFocus();
