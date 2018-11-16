@@ -1,12 +1,11 @@
 package com.example.kobishpak.hw01;
 
 
+import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
 import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -35,12 +35,11 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private Button m_ImageUploadButton;
     private Button m_SubmitButton;
     private ImageView m_UserImageView;
-    private Uri m_ImageUri;
+    private Uri m_ImageUri = null;
+    private boolean m_IsImageValid = false;
 
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
-    private Bitmap userImage = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +163,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         boolean cancel5 = false;
         boolean cancel6 = false;
         boolean cancel7 = false;
-        boolean cancel8 = false;
 
         View focusView = null;
 
@@ -172,19 +170,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         {
             Toast.makeText(this, "Please add user image", Toast.LENGTH_SHORT).show();
             cancel1 = true;
-        }
-        else
-        {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            Bitmap bitmap = BitmapFactory.decodeFile(m_ImageUri.toString(), options);
-            if (options.outWidth != -1 && options.outHeight != -1) {
-                // This is an image file.
-            }
-            else {
-                Toast.makeText(this, "Please choose an image", Toast.LENGTH_SHORT).show();
-                cancel8 = true;
-            }
         }
 
         if (!isFullNameValid(fullName))
@@ -228,10 +213,14 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             cancel7 = true;
         }
 
-        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7 || cancel8) {
+        if (cancel1 || cancel2 || cancel3 || cancel4 || cancel5 || cancel6 || cancel7 || !m_IsImageValid) {
             // There was an error
             if (focusView != null) {
                 focusView.requestFocus();
+            }
+            if(!m_IsImageValid && isImageUploaded)
+            {
+                Toast.makeText(this,"Please choose .jpg, .png or .bmp image" , Toast.LENGTH_SHORT).show();
             }
         } else {
             NextActivity();
@@ -253,7 +242,13 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(date);
 
-        return matcher.matches();
+        int year = 0;
+
+        if (date.length() == 10) {
+            year = Integer.parseInt(date.substring(6));
+        }
+
+        return matcher.matches() && year >= 1900 && year <= 2018;
     }
 
     private boolean isEmailValid(String email) {
@@ -292,6 +287,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
         int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(selectedId);
+
         intent.putExtra("userGender", radioButton.getText().toString());
         intent.putExtra("userImage", m_ImageUri.toString());
         intent.putExtra("userEmail", m_EmailEditText.getText().toString());
@@ -299,8 +295,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         intent.putExtra("userFullName", m_FullNameEditText.getText().toString());
         intent.putExtra("userPhoneNumber", m_PhoneNumberEditText.getText().toString());
         intent.putExtra("date", m_DateEditText.getText().toString());
-
-        // TODO add bundle
 
         startActivity(intent, new Bundle());
     }
@@ -332,20 +326,31 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             try {
                 m_ImageUri = data.getData();
                 assert m_ImageUri != null;
-                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri);// not final
+                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri); // not final
                 m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
 
                 if (m_UserImageView != null){
                     isImageUploaded = true;
+                    this.m_UserImageView.setBackground(null);
                 }
+
+                ContentResolver cR = getApplicationContext().getContentResolver();
+                String type = cR.getType(m_ImageUri);
+
+                // chosen file is a valid image
+                if (type != null) {
+                    m_IsImageValid = type.equals("image/jpeg") || type.equals("image/jpg") || type.equals("image/bmp") || type.equals("image/png");
+                }
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 isImageUploaded = false;
             }
 
         }else {
-            Toast.makeText(EnterUserInfoActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
-            isImageUploaded = false;
+            if(!isImageUploaded) {
+                Toast.makeText(EnterUserInfoActivity.this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,7 +22,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_marginTop="15dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/splash_image"
@@ -30,15 +31,14 @@
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher_foreground"
-        tools:srcCompat="@tools:sample/avatars[3]" />
+        app:srcCompat="@drawable/ecommerce_image" />
 
     <TextView
-        android:lines="4"
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:text="Rivka Ramaty\nKobi Shpak\nEran Atia\nDaniel Arami"
-        tools:layout_marginTop="20dp" />
+        android:lines="4"
+        android:text="@string/group_name"
+        android:textSize="30sp"
+        tools:layout_marginTop="40dp" />
 </LinearLayout>

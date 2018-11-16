@@ -14,9 +14,10 @@
     <string name="splash_image">Splash Image</string>
     <string name="eCommerceApp">eCommerceApp</string>
 
+    <string name="error_invalid_image">Invalid image file</string>
     <string name="error_invalid_register_password">Password must be between 4 and 8 digits long and include at least one numeric digit.</string>
     <string name="error_invalid_name">Full Name cannot be empty.</string>
-    <string name="error_invalid_date">Invalid date. Date format should be DD/MM/YYYY.</string>
+    <string name="error_invalid_date">Invalid date.\n Date format should be DD/MM/YYYY. \nBirth year should be 1900–2018</string>
     <string name="error_invalid_email">Invalid email address.</string>
     <string name="error_invalid_phone">Invalid phone number. Number must contain 10 digits</string>
     <string name="upload_image">Upload Image</string>
@@ -28,4 +29,5 @@
     <string name="email">Email</string>
     <string name="birthday">Birthday</string>
     <string name="phone">Phone</string>
+    <string name="group_name">Rivka Ramaty\nKobi Shpak\nEran Atia\nDaniel Arami</string>
 </resources>
