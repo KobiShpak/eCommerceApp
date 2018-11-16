@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -60,7 +61,16 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
             }
         });
 
+        TextView userInfo = (TextView)findViewById(R.id.textViewUserInfo);
+
+        userInfo.setText(
+                getResources().getString(R.string.name) +  ": " + bundle.get("userFullName").toString() + "\n" +
+                        getResources().getString(R.string.email) + ": " + bundle.get("userEmail").toString() + "\n" +
+                        getResources().getString(R.string.phone) + ": " + bundle.get("userPhoneNumber").toString() + "\n" +
+                        getResources().getString(R.string.password) + ": " + bundle.get("userPassword").toString() + "\n" +
+                        getResources().getString(R.string.gender) + ": " + bundle.get("userGender").toString() + "\n" +
+                        getResources().getString(R.string.birthday) + ": " + bundle.get("date").toString()
+        );
+
     }
-
-
 }

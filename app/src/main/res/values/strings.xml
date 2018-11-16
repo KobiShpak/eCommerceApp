@@ -23,4 +23,9 @@
     <string name="user_details">User Details:</string>
     <string name="send_mail">Send Mail</string>
     <string name="dial">Dial</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="birthday">Birthday</string>
+    <string name="phone">Phone</string>
 </resources>

@@ -172,9 +172,9 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             cancel1 = true;
         }
 
-        if (fullName.isEmpty())
+        if (!isFullNameValid(fullName))
         {
-            Toast.makeText(this, R.string.error_invalid_name, Toast.LENGTH_SHORT);
+            m_FullNameEditText.setError(getString(R.string.error_invalid_name));
             focusView = m_FullNameEditText;
             cancel2 = true;
         }
@@ -221,6 +221,15 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         } else {
             NextActivity();
         }
+    }
+
+    private boolean isFullNameValid(String fullName) {
+        // Full name must contain letters only
+        String regEx="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+        Pattern pattern = Pattern.compile(regEx);
+        Matcher matcher = pattern.matcher(fullName);
+
+        return matcher.matches();
     }
 
     private boolean isDateValid(String date){

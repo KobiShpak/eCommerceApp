@@ -1,60 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".DisplayUserInfoActivity">
+    tools:context=".DisplayUserInfoActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
         android:id="@+id/textViewHeadline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="14dp"
         android:text="@string/user_details"
         android:textSize="30sp"
-        tools:layout_editor_absoluteX="189dp"
-        tools:layout_editor_absoluteY="41dp" />
+        app:layout_constraintBottom_toTopOf="@+id/userImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageView
         android:id="@+id/userImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:background="@mipmap/ic_launcher"
-        android:baselineAligned="false"
+        android:layout_width="111dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="13dp"
         android:contentDescription="@string/user_image"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/textViewUserInfo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_gravity="center"
-/>
+        app:layout_constraintTop_toBottomOf="@+id/textViewHeadline" />
 
     <TextView
         android:id="@+id/textViewUserInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="361dp"
+        android:layout_height="157dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="10dp"
+        android:lineSpacingExtra="5sp"
+        android:textAlignment="textStart"
+        android:textSize="18sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonDial"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userImageView" />
 
     <Button
         android:id="@+id/buttonDial"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="19dp"
         android:background="@color/colorPrimary"
         android:text="@string/dial"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSendMail"
+        app:layout_constraintStart_toStartOf="@+id/buttonSendMail"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserInfo" />
 
     <Button
         android:id="@+id/buttonSendMail"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="25dp"
         android:background="@color/colorPrimary"
         android:text="@string/send_mail"
-        android:textColor="@android:color/white" />
-</LinearLayout>
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonDial" />
+</android.support.constraint.ConstraintLayout>
