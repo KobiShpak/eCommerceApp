@@ -325,7 +325,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             try {
                 m_ImageUri = data.getData();
                 assert m_ImageUri != null;
-                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri); // not final
+                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri);
                 m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
 
                 if (m_UserImageView != null){
