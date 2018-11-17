@@ -52,7 +52,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus){
                 if(!hasFocus){
-                    if (((EditText)v).getText().toString().isEmpty())
+                    if (!isFullNameValid(((EditText)v).getText().toString()))
                     {
                         ((EditText)v).setError(getString(R.string.error_invalid_name));
                     }
@@ -228,8 +228,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private boolean isFullNameValid(String fullName) {
-        // Full name must contain letters only
-        String regEx="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+        // Full name must contain letters only and one whitespace between names
+        String regEx="^([A-Z][a-z]*((\\s)))+[A-Z][a-z]*$";
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(fullName);
 
@@ -326,7 +326,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             try {
                 m_ImageUri = data.getData();
                 assert m_ImageUri != null;
-                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri); // not final
+                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri);
                 m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
 
                 if (m_UserImageView != null){

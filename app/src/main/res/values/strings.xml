@@ -16,7 +16,7 @@
 
     <string name="error_invalid_image">Invalid image file</string>
     <string name="error_invalid_register_password">Password must be between 4 and 8 digits long and include at least one numeric digit.</string>
-    <string name="error_invalid_name">Full Name cannot be empty.</string>
+    <string name="error_invalid_name">Full Name must contain first and last name.\nFirst letter in each word should be capital</string>
     <string name="error_invalid_date">Invalid date.\n Date format should be DD/MM/YYYY. \nBirth year should be 1900–2018</string>
     <string name="error_invalid_email">Invalid email address.</string>
     <string name="error_invalid_phone">Invalid phone number. Number must contain 10 digits</string>
