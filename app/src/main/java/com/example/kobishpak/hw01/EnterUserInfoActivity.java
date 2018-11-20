@@ -231,7 +231,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         // Full name must contain letters only and one whitespace between names
         String regEx="^([A-Z][a-z]*((\\s)))+[A-Z][a-z]*$";
         Pattern pattern = Pattern.compile(regEx);
-        Matcher matcher = pattern.matcher(fullName);
+        Matcher matcher =   pattern.matcher(fullName);
 
         return matcher.matches();
     }
