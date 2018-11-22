@@ -30,4 +30,7 @@
     <string name="birthday">Birthday</string>
     <string name="phone">Phone</string>
     <string name="group_name">Rivka Ramaty\nKobi Shpak\nEran Atia\nDaniel Arami</string>
+
+    <string name="facebook_app_id">269659903893075</string>
+    <string name="fb_login_protocol_scheme">fb269659903893075</string>
 </resources>
