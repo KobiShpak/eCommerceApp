@@ -16,6 +16,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -37,6 +41,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private ImageView m_UserImageView;
     private Uri m_ImageUri = null;
     private boolean m_IsImageValid = false;
+    private FirebaseAuth m_FirebaseAuth;
+    private DatabaseReference m_DatabaseReferece;
 
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
@@ -125,7 +131,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private void OnUserImageClick() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-        this.m_UserImageView.setBackground(null);
+        //this.m_UserImageView.setBackground(null);
     }
 
     private void InitialiseInstances() {
@@ -223,7 +229,18 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                 Toast.makeText(this,"Please choose .jpg, .png or .bmp image" , Toast.LENGTH_SHORT).show();
             }
         } else {
-            NextActivity();
+            UserInfo userInfo = new UserInfo(
+            m_FullNameEditText.getText().toString(),
+            m_EmailEditText.getText().toString(),
+            m_PhoneNumberEditText.getText().toString(),
+            m_PasswordEditText.getText().toString(),
+            ((RadioButton)findViewById(m_GenderRadioButton.getCheckedRadioButtonId())).getText().toString(),
+            m_DateEditText.getText().toString(),
+            m_ImageUri.toString());
+
+            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
+            m_DatabaseReferece.child(user.getUid()).setValue(userInfo);
+            startActivity(new Intent(this, DisplayUserInfoActivity.class));
         }
     }
 
@@ -282,7 +299,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    private void NextActivity(){
+    /*private void NextActivity(){
         Intent intent = new Intent(EnterUserInfoActivity.this, DisplayUserInfoActivity.class);
 
         int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
@@ -297,7 +314,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         intent.putExtra("date", m_DateEditText.getText().toString());
 
         startActivity(intent, new Bundle());
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -331,7 +348,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
                 if (m_UserImageView != null){
                     isImageUploaded = true;
-                    this.m_UserImageView.setBackground(null);
+                    //this.m_UserImageView.setBackground(null);
                 }
 
                 ContentResolver cR = getApplicationContext().getContentResolver();

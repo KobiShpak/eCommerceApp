@@ -59,4 +59,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp" />
+
+    <TextView
+        android:id="@+id/createAccountTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Create an account" />
 </LinearLayout>
