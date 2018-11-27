@@ -229,7 +229,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                 Toast.makeText(this,"Please choose .jpg, .png or .bmp image" , Toast.LENGTH_SHORT).show();
             }
         } else {
-            UserInfo userInfo = new UserInfo(
+            UserInformation userInfo = new UserInformation(
             m_FullNameEditText.getText().toString(),
             m_EmailEditText.getText().toString(),
             m_PhoneNumberEditText.getText().toString(),
