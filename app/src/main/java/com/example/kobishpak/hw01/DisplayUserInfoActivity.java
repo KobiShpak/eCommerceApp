@@ -1,9 +1,11 @@
 package com.example.kobishpak.hw01;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +16,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class DisplayUserInfoActivity extends AppCompatActivity {
 
@@ -27,37 +35,66 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private FirebaseAuth m_FirebaseAuth;
     private FirebaseUser m_User;
     private DatabaseReference m_DatabaseReferece;
+    private UserInformation m_UserInfo;
     private boolean doubleBackToExitPressedOnce = false;
-    private Bundle m_Bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_user_info);
         Log.e(TAG, "Display==> OnCreate!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
         m_FirebaseAuth = FirebaseAuth.getInstance();
+
         if (m_FirebaseAuth.getCurrentUser() == null)
         {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
+
         m_User = m_FirebaseAuth.getCurrentUser();
-        m_DatabaseReferece = FirebaseDatabase.getInstance().getReference();
+        m_DatabaseReferece = FirebaseDatabase.getInstance().getReference("users");
+
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_DialButton = findViewById(R.id.buttonDial);
         m_SendMailButton = findViewById(R.id.buttonSendMail);
         m_UserImageView = findViewById(R.id.userImageView);
-        m_Bundle = getIntent().getExtras();
 
-        /*try {
-            Uri imageUri = Uri.parse((String) mBundle.get("userImage"));
-            assert imageUri != null;
-            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-            m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }*/
+        readUserInfoFromDatabase();
+    }
+
+    private void readUserInfoFromDatabase() {
+        m_DatabaseReferece.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                m_UserInfo = new UserInformation();
+
+                if (m_FirebaseAuth.getCurrentUser() != null) {
+                    m_UserInfo = dataSnapshot.child(m_FirebaseAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
+                }
+
+                DisplayUserInformation();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void DisplayUserInformation() {
+
+//        try {
+//            Uri imageUri = Uri.parse(m_UserInfo.getM_ImageUri());
+//            assert imageUri != null;
+//            InputStream imageStream = getContentResolver().openInputStream(imageUri);
+//            m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+//        }
+//        catch(FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
 
         m_DialButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,12 +117,12 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
 
         String userText = String.format("Name: %s\nEmail: %s\nPhone: %s\nPassword: %s\nGender: %s\nBirthday: %s",
-                m_Bundle.get("name"),
-                m_Bundle.get("email"),
-                m_Bundle.get("phone"),
-                "",
-                m_Bundle.get("gender"),
-                m_Bundle.get("birthday"));
+                m_UserInfo.getM_FullName(),
+                m_UserInfo.getM_Email(),
+                m_UserInfo.getM_PhoneNumber(),
+                m_UserInfo.getM_Password(),
+                m_UserInfo.getM_Gender(),
+                m_UserInfo.getM_Date());
 
         m_UserInfoTextView.setText(userText);
     }

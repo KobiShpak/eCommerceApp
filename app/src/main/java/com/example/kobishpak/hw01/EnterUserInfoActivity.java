@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,9 +18,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.regex.Matcher;
 import java.io.FileNotFoundException;
@@ -43,6 +49,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private boolean m_IsImageValid = false;
     private FirebaseAuth m_FirebaseAuth;
     private DatabaseReference m_DatabaseReferece;
+    private static final String TAG = "FACEREGISTER";
 
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
@@ -53,6 +60,9 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_user_info);
 
         InitialiseInstances();
+
+        m_FirebaseAuth = FirebaseAuth.getInstance();
+        m_DatabaseReferece = FirebaseDatabase.getInstance().getReference("users");
 
         m_FullNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -238,9 +248,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             m_DateEditText.getText().toString(),
             m_ImageUri.toString());
 
-            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
-            m_DatabaseReferece.child(user.getUid()).setValue(userInfo);
-            startActivity(new Intent(this, DisplayUserInfoActivity.class));
+            createAccount(userInfo);
         }
     }
 
@@ -299,23 +307,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    /*private void NextActivity(){
-        Intent intent = new Intent(EnterUserInfoActivity.this, DisplayUserInfoActivity.class);
-
-        int selectedId = m_GenderRadioButton.getCheckedRadioButtonId();
-        RadioButton radioButton = findViewById(selectedId);
-
-        intent.putExtra("userGender", radioButton.getText().toString());
-        intent.putExtra("userImage", m_ImageUri.toString());
-        intent.putExtra("userEmail", m_EmailEditText.getText().toString());
-        intent.putExtra("userPassword", m_PasswordEditText.getText().toString());
-        intent.putExtra("userFullName", m_FullNameEditText.getText().toString());
-        intent.putExtra("userPhoneNumber", m_PhoneNumberEditText.getText().toString());
-        intent.putExtra("date", m_DateEditText.getText().toString());
-
-        startActivity(intent, new Bundle());
-    }*/
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -370,4 +361,33 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void createAccount(final UserInformation i_User){
+        m_FirebaseAuth.createUserWithEmailAndPassword(i_User.getM_Email(), i_User.getM_Password())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+
+                            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
+                            if (user != null) {
+                                m_DatabaseReferece.child(user.getUid()).setValue(i_User);
+                            }
+
+                            Intent intent = new Intent(EnterUserInfoActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(EnterUserInfoActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
 }

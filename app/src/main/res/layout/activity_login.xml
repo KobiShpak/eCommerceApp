@@ -44,13 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"
-        android:text="Login"
+        android:text="@string/login"
         android:textColor="@android:color/white" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:outlineSpotShadowColor="@color/cardview_dark_background"
         android:layout_margin="20dp"/>
 
     <com.facebook.login.widget.LoginButton
@@ -65,5 +64,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Create an account" />
+        android:text="@string/create_an_account" />
 </LinearLayout>

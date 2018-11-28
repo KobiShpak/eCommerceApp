@@ -13,7 +13,6 @@ public class UserInformation {
 
     public UserInformation() {}
 
-
     public UserInformation(String i_FullName, String i_Email, String i_PhoneNumber, String i_Password, String i_Gender, String i_Date, String i_ImageUri){
         this.m_FullName = i_FullName;
         this.m_Email = i_Email;
