@@ -1,6 +1,8 @@
 package com.example.kobishpak.hw01;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,9 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +28,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -33,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText m_EmailEditText;
     private EditText m_PasswordEditText;
     private Button m_LoginButton;
+    private LoginButton m_FacebookLoginButton;
     private TextView m_CreateAccount;
 
     @Override
@@ -45,18 +56,16 @@ public class LoginActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null){
-
         }
 
-// Initialize Facebook Login button
+        // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        m_FacebookLoginButton.setReadPermissions("email", "public_profile");
+        m_FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                //handleFacebookAccessToken(loginResult.getAccessToken());
+                //
             }
 
             @Override
@@ -92,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         m_EmailEditText = findViewById(R.id.emailAddress);
         m_PasswordEditText = findViewById(R.id.password);
         m_LoginButton = findViewById(R.id.buttonSubmit);
+        m_FacebookLoginButton = findViewById(R.id.login_button);
         m_CreateAccount = findViewById(R.id.createAccountTextView);
     }
 

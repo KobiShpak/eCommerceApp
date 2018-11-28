@@ -27,8 +27,8 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private FirebaseAuth m_FirebaseAuth;
     private FirebaseUser m_User;
     private DatabaseReference m_DatabaseReferece;
-
     private boolean doubleBackToExitPressedOnce = false;
+    private Bundle m_Bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         m_DialButton = findViewById(R.id.buttonDial);
         m_SendMailButton = findViewById(R.id.buttonSendMail);
         m_UserImageView = findViewById(R.id.userImageView);
+        m_Bundle = getIntent().getExtras();
 
         /*try {
             Uri imageUri = Uri.parse((String) mBundle.get("userImage"));
@@ -79,12 +80,12 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
 
         String userText = String.format("Name: %s\nEmail: %s\nPhone: %s\nPassword: %s\nGender: %s\nBirthday: %s",
-                m_User.getDisplayName(),
-                m_User.getEmail(),
+                m_Bundle.get("name"),
+                m_Bundle.get("email"),
+                m_Bundle.get("phone"),
                 "",
-                "",
-                "",
-                "");
+                m_Bundle.get("gender"),
+                m_Bundle.get("birthday"));
 
         m_UserInfoTextView.setText(userText);
     }
