@@ -33,8 +33,8 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private Button m_SendMailButton;
     private Button m_DialButton;
     private FirebaseAuth m_FirebaseAuth;
-    private FirebaseUser m_User;
-    private DatabaseReference m_DatabaseReferece;
+    private FirebaseUser m_FirebaseUser;
+    private DatabaseReference m_DatabaseReference;
     private UserInformation m_UserInfo;
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -44,27 +44,30 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_user_info);
         Log.e(TAG, "Display==> OnCreate!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-        m_FirebaseAuth = FirebaseAuth.getInstance();
+        initializeInstances();
 
+        m_FirebaseAuth = FirebaseAuth.getInstance();
         if (m_FirebaseAuth.getCurrentUser() == null)
         {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        m_User = m_FirebaseAuth.getCurrentUser();
-        m_DatabaseReferece = FirebaseDatabase.getInstance().getReference("users");
+        m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
+        m_DatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+        readUserInfoFromDatabase();
+    }
 
+    private void initializeInstances()
+    {
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_DialButton = findViewById(R.id.buttonDial);
         m_SendMailButton = findViewById(R.id.buttonSendMail);
         m_UserImageView = findViewById(R.id.userImageView);
-
-        readUserInfoFromDatabase();
     }
 
     private void readUserInfoFromDatabase() {
-        m_DatabaseReferece.addValueEventListener(new ValueEventListener() {
+        m_DatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -86,21 +89,20 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
     private void DisplayUserInformation() {
 
-//        try {
-//            Uri imageUri = Uri.parse(m_UserInfo.getM_ImageUri());
-//            assert imageUri != null;
-//            InputStream imageStream = getContentResolver().openInputStream(imageUri);
-//            m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
-//        }
-//        catch(FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Log.e(TAG, "URI is:" + m_UserInfo.getM_ImageUri());
+            InputStream imageStream = getContentResolver().openInputStream(Uri.parse(m_UserInfo.getM_ImageUri()));
+            m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+        }
+        catch(FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         m_DialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + m_User.getPhoneNumber()));
+                intent.setData(Uri.parse("tel:" + m_FirebaseUser.getPhoneNumber()));
                 startActivity(intent);
             }
         });
@@ -109,7 +111,7 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri data = Uri.parse("mailto:" + m_User.getEmail() + "?subject=" + "" + "&body=" + "");
+                Uri data = Uri.parse("mailto:" + m_FirebaseUser.getEmail() + "?subject=" + "" + "&body=" + "");
                 intent.setData(data);
                 startActivity(intent);
             }
