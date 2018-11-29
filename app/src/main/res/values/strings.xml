@@ -35,4 +35,5 @@
     <string name="fb_login_protocol_scheme">fb269659903893075</string>
     <string name="create_an_account">Create an account</string>
     <string name="login">Login</string>
+    <string name="init_sign_in"><![CDATA[InitSignIn==>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]]></string>
 </resources>

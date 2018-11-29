@@ -21,6 +21,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,11 +61,18 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
+        // TODO: store strings permission in array (globally)
         m_FacebookLoginButton.setReadPermissions("email", "public_profile");
+
         m_FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
+
+                AccessToken userAccessToken = loginResult.getAccessToken();
+                boolean isLoggedIn = userAccessToken != null && !userAccessToken.isExpired();
+
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
             }
 
             @Override
@@ -77,10 +85,11 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "facebook:onError", error);
             }
         });
+
         m_LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e(TAG, "InitSignIn==>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                Log.e(TAG, getString(R.string.init_sign_in));
                 signIn(m_EmailEditText.getText().toString(), m_PasswordEditText.getText().toString());
             }
             });

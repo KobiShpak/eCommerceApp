@@ -141,7 +141,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private void OnUserImageClick() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-        //this.m_UserImageView.setBackground(null);
     }
 
     private void InitialiseInstances() {
