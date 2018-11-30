@@ -21,6 +21,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -73,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 boolean isLoggedIn = userAccessToken != null && !userAccessToken.isExpired();
 
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
+                startActivity(new Intent(LoginActivity.this, DisplayUserInfoActivity.class));
             }
 
             @Override
@@ -145,5 +147,33 @@ public class LoginActivity extends AppCompatActivity {
 
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void createFacebookAccount(final UserInformation i_User){
+        m_FirebaseAuth.createUserWithEmailAndPassword(i_User.getM_Email(), i_User.getM_Password())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+
+                            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
+                            if (user != null) {
+                                m_DatabaseReferece.child(user.getUid()).setValue(i_User);
+                            }
+
+                            Intent intent = new Intent(EnterUserInfoActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(EnterUserInfoActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

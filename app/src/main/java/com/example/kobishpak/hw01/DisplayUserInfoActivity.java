@@ -1,6 +1,7 @@
 package com.example.kobishpak.hw01;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,14 +90,8 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
     private void DisplayUserInformation() {
 
-        try {
-            Log.e(TAG, "URI is:" + m_UserInfo.getM_ImageUri());
-            InputStream imageStream = getContentResolver().openInputStream(Uri.parse(m_UserInfo.getM_ImageUri()));
-            m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
-        }
-        catch(FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        Log.e(TAG, "URI is:" + m_UserInfo.getM_ImageUri());
+        m_UserImageView.setImageURI(Uri.parse(m_UserInfo.getM_ImageUri()));
 
         m_DialButton.setOnClickListener(new View.OnClickListener() {
             @Override
