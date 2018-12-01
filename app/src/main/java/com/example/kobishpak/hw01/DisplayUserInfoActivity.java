@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +44,7 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_user_info);
-        Log.e(TAG, "Display==> OnCreate!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        Log.e(TAG, getString(R.string.display_on_create));
 
         initializeInstances();
 
@@ -59,8 +60,7 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         readUserInfoFromDatabase();
     }
 
-    private void initializeInstances()
-    {
+    private void initializeInstances() {
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_DialButton = findViewById(R.id.buttonDial);
         m_SendMailButton = findViewById(R.id.buttonSendMail);
@@ -91,7 +91,8 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private void DisplayUserInformation() {
 
         Log.e(TAG, "URI is:" + m_UserInfo.getM_ImageUri());
-        m_UserImageView.setImageURI(Uri.parse(m_UserInfo.getM_ImageUri()));
+//        m_UserImageView.setImageURI(Uri.parse(m_UserInfo.getM_ImageUri()));
+        Glide.with(this).load(Uri.parse(m_UserInfo.getM_ImageUri())).into(m_UserImageView);
 
         m_DialButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -140,7 +141,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private void OnUserImageClick() {
-        startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), GET_FROM_GALLERY);
     }
 
     private void InitialiseInstances() {
@@ -330,32 +332,22 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         super.onActivityResult(reqCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            try {
-                m_ImageUri = data.getData();
-                assert m_ImageUri != null;
-                InputStream imageStream = getContentResolver().openInputStream(m_ImageUri);
-                m_UserImageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+            m_ImageUri = data.getData();
+            m_UserImageView.setImageURI(m_ImageUri);
 
-                if (m_UserImageView != null){
-                    isImageUploaded = true;
-                    //this.m_UserImageView.setBackground(null);
-                }
-
-                ContentResolver cR = getApplicationContext().getContentResolver();
-                String type = cR.getType(m_ImageUri);
-
-                // chosen file is a valid image
-                if (type != null) {
-                    m_IsImageValid = type.equals("image/jpeg") || type.equals("image/jpg") || type.equals("image/bmp") || type.equals("image/png");
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                isImageUploaded = false;
+            if (m_UserImageView != null) {
+                isImageUploaded = true;
             }
 
-        }else {
-            if(!isImageUploaded) {
+            ContentResolver cR = getApplicationContext().getContentResolver();
+            String type = cR.getType(m_ImageUri);
+
+            // chosen file is a valid image
+            if (type != null) {
+                m_IsImageValid = type.equals("image/jpeg") || type.equals("image/jpg") || type.equals("image/bmp") || type.equals("image/png");
+            }
+        } else {
+            if (!isImageUploaded) {
                 Toast.makeText(EnterUserInfoActivity.this, "You haven't picked Image", Toast.LENGTH_LONG).show();
             }
         }

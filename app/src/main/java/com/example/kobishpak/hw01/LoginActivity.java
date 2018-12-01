@@ -27,7 +27,9 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
     private static final String TAG = "FACELOG";
+    private String[] m_FacebookPermissions = {"email", "public_profile"};
     private FirebaseAuth mAuth;
 
     private EditText m_EmailEditText;
@@ -57,24 +60,19 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null){
-        }
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        // TODO: store strings permission in array (globally)
-        m_FacebookLoginButton.setReadPermissions("email", "public_profile");
+        m_FacebookLoginButton.setReadPermissions(m_FacebookPermissions);
 
         m_FacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
 
-                AccessToken userAccessToken = loginResult.getAccessToken();
-                boolean isLoggedIn = userAccessToken != null && !userAccessToken.isExpired();
-
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
-                startActivity(new Intent(LoginActivity.this, DisplayUserInfoActivity.class));
+//                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(m_FacebookPermissions));
+//                startActivity(new Intent(LoginActivity.this, DisplayUserInfoActivity.class));
+                handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
@@ -149,28 +147,25 @@ public class LoginActivity extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void createFacebookAccount(final UserInformation i_User){
-        m_FirebaseAuth.createUserWithEmailAndPassword(i_User.getM_Email(), i_User.getM_Password())
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
 
-                            FirebaseUser user = m_FirebaseAuth.getCurrentUser();
-                            if (user != null) {
-                                m_DatabaseReferece.child(user.getUid()).setValue(i_User);
-                            }
-
-                            Intent intent = new Intent(EnterUserInfoActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-
+                            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(m_FacebookPermissions));
+                            startActivity(new Intent(LoginActivity.this, DisplayUserInfoActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EnterUserInfoActivity.this, "Authentication failed.",
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
