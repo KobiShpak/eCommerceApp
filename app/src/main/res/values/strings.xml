@@ -37,4 +37,5 @@
     <string name="login">Login</string>
     <string name="init_sign_in"><![CDATA[InitSignIn==>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]]></string>
     <string name="display_on_create"><![CDATA[Display==> OnCreate!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]]></string>
+
 </resources>

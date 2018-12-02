@@ -1,13 +1,17 @@
 package com.example.kobishpak.hw01;
 
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -142,7 +146,25 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private void OnUserImageClick() {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if ((ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED)) {
+            Log.d(TAG, "OnUserImageClick:PERMISSION_NOT_GRANTED");
+
+            ActivityCompat.requestPermissions(EnterUserInfoActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+
+            ActivityCompat.requestPermissions(EnterUserInfoActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
+        else {
+            Log.d(TAG, "OnUserImageClick:PERMISSION_GRANTED");
+        }
         startActivityForResult(Intent.createChooser(i, "Select Picture"), GET_FROM_GALLERY);
+        Log.d(TAG, "OnUserImageClick: after startActivityForResult");
+
     }
 
     private void InitialiseInstances() {
@@ -240,6 +262,22 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                 Toast.makeText(this,"Please choose .jpg, .png or .bmp image" , Toast.LENGTH_SHORT).show();
             }
         } else {
+            if ((ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED)) {
+                Log.d(TAG, "OnClickSubmitButton:PERMISSION_NOT_GRANTED");
+
+                ActivityCompat.requestPermissions(EnterUserInfoActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+
+                ActivityCompat.requestPermissions(EnterUserInfoActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+            }
+            else {
+                Log.d(TAG, "OnClickSubmitButton:PERMISSION_GRANTED");
+            }
             UserInformation userInfo = new UserInformation(
             m_FullNameEditText.getText().toString(),
             m_EmailEditText.getText().toString(),
@@ -248,6 +286,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             ((RadioButton)findViewById(m_GenderRadioButton.getCheckedRadioButtonId())).getText().toString(),
             m_DateEditText.getText().toString(),
             m_ImageUri.toString());
+            Log.d(TAG, "OnClickSubmitButton: URI: " + m_ImageUri.toString());
+
 
             createAccount(userInfo);
         }
