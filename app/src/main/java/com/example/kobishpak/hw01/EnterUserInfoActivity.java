@@ -2,6 +2,7 @@ package com.example.kobishpak.hw01;
 
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -58,6 +59,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +180,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         m_DateEditText = findViewById(R.id.birthday);
         m_SubmitButton = findViewById(R.id.buttonSubmit);
         m_UserImageView = findViewById(R.id.userImageView);
+        progressDialog = new ProgressDialog(this);
     }
 
     private void OnClickSubmitButton(){
@@ -288,7 +292,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             m_ImageUri.toString());
             Log.d(TAG, "OnClickSubmitButton: URI: " + m_ImageUri.toString());
 
-
             createAccount(userInfo);
         }
     }
@@ -394,6 +397,11 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     public void createAccount(final UserInformation i_User){
+        //---> ADDED Just for UI
+        progressDialog.setMessage("Creating an account. \nPlease wait...");
+        progressDialog.show();
+        //---> END
+
         m_FirebaseAuth.createUserWithEmailAndPassword(i_User.getM_Email(), i_User.getM_Password())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -407,6 +415,9 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                                 m_DatabaseReferece.child(user.getUid()).setValue(i_User);
                             }
 
+                            Toast.makeText(EnterUserInfoActivity.this, "Successfully registered", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
+
                             Intent intent = new Intent(EnterUserInfoActivity.this, LoginActivity.class);
                             startActivity(intent);
                             finish();
@@ -416,6 +427,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(EnterUserInfoActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     }
                 });

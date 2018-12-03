@@ -25,6 +25,8 @@ import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -49,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText m_PasswordEditText;
     private Button m_LoginButton;
     private LoginButton m_FacebookLoginButton;
+    private SignInButton m_GoogleLoginButton;
     private TextView m_CreateAccount;
 
     @Override
@@ -108,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         m_PasswordEditText = findViewById(R.id.password);
         m_LoginButton = findViewById(R.id.buttonSubmit);
         m_FacebookLoginButton = findViewById(R.id.login_button);
+        m_GoogleLoginButton = findViewById(R.id.sign_in_button);
         m_CreateAccount = findViewById(R.id.createAccountTextView);
     }
 
@@ -127,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
+                            Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_LONG).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this, DisplayUserInfoActivity.class));
                         } else {

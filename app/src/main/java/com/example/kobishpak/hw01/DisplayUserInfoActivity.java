@@ -1,5 +1,6 @@
 package com.example.kobishpak.hw01;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,11 +35,13 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private TextView m_UserInfoTextView;
     private Button m_SendMailButton;
     private Button m_DialButton;
+    private Button m_LogOutButton;
     private FirebaseAuth m_FirebaseAuth;
     private FirebaseUser m_FirebaseUser;
     private DatabaseReference m_DatabaseReference;
     private UserInformation m_UserInfo;
     private boolean doubleBackToExitPressedOnce = false;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +57,25 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
+        else {
+            m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
+            m_DatabaseReference = FirebaseDatabase.getInstance().getReference("users");
+            pleaseWait();
+            readUserInfoFromDatabase();
+        }
+    }
 
-        m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
-        m_DatabaseReference = FirebaseDatabase.getInstance().getReference("users");
-        readUserInfoFromDatabase();
+    private void pleaseWait() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading. Please wait...");
+        progressDialog.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                progressDialog.dismiss();
+            }
+        }, 2000); // 2000 milliseconds delay for dialog
     }
 
     private void initializeInstances() {
@@ -65,6 +83,18 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         m_DialButton = findViewById(R.id.buttonDial);
         m_SendMailButton = findViewById(R.id.buttonSendMail);
         m_UserImageView = findViewById(R.id.userImageView);
+        m_LogOutButton = findViewById(R.id.buttonLogOut);
+        m_LogOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLogOutButton();
+            }
+        });
+    }
+
+    private void onClickLogOutButton() {
+        m_FirebaseAuth.signOut();
+        startActivity(new Intent(DisplayUserInfoActivity.this, LoginActivity.class));
     }
 
     private void readUserInfoFromDatabase() {

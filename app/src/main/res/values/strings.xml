@@ -24,6 +24,7 @@
     <string name="user_details">User Details:</string>
     <string name="send_mail">Send Mail</string>
     <string name="dial">Dial</string>
+    <string name="logout">LOG OUT</string>
 
     <string name="name">Name</string>
     <string name="email">Email</string>
