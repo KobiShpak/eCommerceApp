@@ -2,12 +2,9 @@ package com.example.kobishpak.hw01;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,14 +16,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 public class DisplayUserInfoActivity extends AppCompatActivity {
 
@@ -38,8 +27,6 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private Button m_LogOutButton;
     private FirebaseAuth m_FirebaseAuth;
     private FirebaseUser m_FirebaseUser;
-    private DatabaseReference m_DatabaseReference;
-    private UserInformation m_UserInfo;
     private boolean doubleBackToExitPressedOnce = false;
     private ProgressDialog progressDialog;
 
@@ -59,9 +46,8 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         }
         else {
             m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
-            m_DatabaseReference = FirebaseDatabase.getInstance().getReference("users");
             pleaseWait();
-            readUserInfoFromDatabase();
+            DisplayUserInformation();
         }
     }
 
@@ -97,32 +83,9 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         startActivity(new Intent(DisplayUserInfoActivity.this, LoginActivity.class));
     }
 
-    private void readUserInfoFromDatabase() {
-        m_DatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                m_UserInfo = new UserInformation();
-
-                if (m_FirebaseAuth.getCurrentUser() != null) {
-                    m_UserInfo = dataSnapshot.child(m_FirebaseAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
-                }
-
-                DisplayUserInformation();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     private void DisplayUserInformation() {
 
-        Log.e(TAG, "URI is:" + m_UserInfo.getM_ImageUri());
-//        m_UserImageView.setImageURI(Uri.parse(m_UserInfo.getM_ImageUri()));
-        Glide.with(this).load(Uri.parse(m_UserInfo.getM_ImageUri())).into(m_UserImageView);
+        Glide.with(DisplayUserInfoActivity.this).load(m_FirebaseUser.getPhotoUrl()).into(m_UserImageView);
 
         m_DialButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,14 +106,9 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
             }
         });
 
-
-        String userText = String.format("Name: %s\nEmail: %s\nPhone: %s\nPassword: %s\nGender: %s\nBirthday: %s",
-                m_UserInfo.getM_FullName(),
-                m_UserInfo.getM_Email(),
-                m_UserInfo.getM_PhoneNumber(),
-                m_UserInfo.getM_Password(),
-                m_UserInfo.getM_Gender(),
-                m_UserInfo.getM_Date());
+        String userText = String.format("Name: %s\nEmail: %s",
+                m_FirebaseUser.getDisplayName(),
+                m_FirebaseUser.getEmail());
 
         m_UserInfoTextView.setText(userText);
     }

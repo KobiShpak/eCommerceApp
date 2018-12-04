@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -54,7 +55,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private Uri m_ImageUri = null;
     private boolean m_IsImageValid = false;
     private FirebaseAuth m_FirebaseAuth;
-    private DatabaseReference m_DatabaseReferece;
     private static final String TAG = "FACEREGISTER";
 
     private boolean doubleBackToExitPressedOnce = false;
@@ -68,9 +68,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_enter_user_info);
 
         InitialiseInstances();
-
-        m_FirebaseAuth = FirebaseAuth.getInstance();
-        m_DatabaseReferece = FirebaseDatabase.getInstance().getReference("users");
 
         m_FullNameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -282,17 +279,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             else {
                 Log.d(TAG, "OnClickSubmitButton:PERMISSION_GRANTED");
             }
-            UserInformation userInfo = new UserInformation(
-            m_FullNameEditText.getText().toString(),
-            m_EmailEditText.getText().toString(),
-            m_PhoneNumberEditText.getText().toString(),
-            m_PasswordEditText.getText().toString(),
-            ((RadioButton)findViewById(m_GenderRadioButton.getCheckedRadioButtonId())).getText().toString(),
-            m_DateEditText.getText().toString(),
-            m_ImageUri.toString());
-            Log.d(TAG, "OnClickSubmitButton: URI: " + m_ImageUri.toString());
 
-            createAccount(userInfo);
+            createAccount(email, password);
         }
     }
 
@@ -396,13 +384,13 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         }
     }
 
-    public void createAccount(final UserInformation i_User){
+    public void createAccount(String email, String password){
         //---> ADDED Just for UI
         progressDialog.setMessage("Creating an account. \nPlease wait...");
         progressDialog.show();
         //---> END
 
-        m_FirebaseAuth.createUserWithEmailAndPassword(i_User.getM_Email(), i_User.getM_Password())
+        m_FirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -411,8 +399,12 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
 
                             FirebaseUser user = m_FirebaseAuth.getCurrentUser();
+
                             if (user != null) {
-                                m_DatabaseReferece.child(user.getUid()).setValue(i_User);
+                                user.updateProfile(new UserProfileChangeRequest.Builder()
+                                        .setPhotoUri(m_ImageUri)
+                                        .setDisplayName(m_FullNameEditText.getText().toString())
+                                        .build());
                             }
 
                             Toast.makeText(EnterUserInfoActivity.this, "Successfully registered", Toast.LENGTH_LONG).show();

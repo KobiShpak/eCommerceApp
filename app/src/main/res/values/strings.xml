@@ -38,5 +38,10 @@
     <string name="login">Login</string>
     <string name="init_sign_in"><![CDATA[InitSignIn==>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]]></string>
     <string name="display_on_create"><![CDATA[Display==> OnCreate!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!]]></string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="password_reset_succeded">Password reset link sent to your mail</string>
+    <string name="email_not_found">Email was not found</string>
+    <string name="please_enter_email">Email is invalid, please enter your user email in the email field</string>
+    <string name="sign_in_anonymously">Sign In Anonymously</string>
 
 </resources>
