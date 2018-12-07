@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         m_ForgotPasswordText.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                resetPassword();
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
 
@@ -168,23 +168,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void resetPassword() {
-        if (!(m_EmailEditText.getText().toString().isEmpty())) {
-            mAuth.sendPasswordResetEmail(m_EmailEditText.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, R.string.password_reset_succeded, Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, R.string.email_not_found, Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }else {
-            Toast.makeText(LoginActivity.this, R.string.please_enter_email, Toast.LENGTH_LONG).show();
-        }
     }
 
     private void signInWithGoogle() {
