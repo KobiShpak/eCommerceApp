@@ -58,7 +58,7 @@
         android:layout_height="wrap_content" />
 
     <Space
-        android:layout_width="match_parent"
+        android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp" />
 
@@ -68,15 +68,6 @@
         android:layout_height="wrap_content">
 
     </com.google.android.gms.common.SignInButton>
-
-    <TextView
-        android:id="@+id/signInAnonymouslyTextView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="@string/sign_in_anonymously"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/createAccountTextView"
@@ -93,6 +84,15 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:text="@string/forgot_password"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/signInAnonymouslyTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="end"
+        android:text="@string/sign_in_anonymously"
         android:textSize="18sp"
         android:textStyle="bold" />
 </LinearLayout>

@@ -205,13 +205,6 @@ public class LoginActivity extends AppCompatActivity {
         m_GoogleLoginButton.setSize(SignInButton.SIZE_STANDARD);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // TODO: Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-    }
-
     public void signIn(String email, String password){
         Log.e(TAG, "signIn==> " + email);
         mAuth.signInWithEmailAndPassword(email, password)
@@ -251,7 +244,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                // ...
             }
         }
     }
