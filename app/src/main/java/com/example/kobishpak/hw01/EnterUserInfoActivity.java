@@ -54,7 +54,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private ImageView m_UserImageView;
     private Uri m_ImageUri = null;
     private boolean m_IsImageValid = false;
-    private FirebaseAuth m_FirebaseAuth;
+    private FirebaseAuth m_FirebaseAuth = FirebaseAuth.getInstance();
     private static final String TAG = "FACEREGISTER";
 
     private boolean doubleBackToExitPressedOnce = false;
@@ -145,7 +145,6 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     }
 
     private void OnUserImageClick() {
-        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if ((ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED)) {
@@ -162,6 +161,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         else {
             Log.d(TAG, "OnUserImageClick:PERMISSION_GRANTED");
         }
+        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(i, "Select Picture"), GET_FROM_GALLERY);
         Log.d(TAG, "OnUserImageClick: after startActivityForResult");
 
@@ -262,7 +262,9 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             {
                 Toast.makeText(this,"Please choose .jpg, .png or .bmp image" , Toast.LENGTH_SHORT).show();
             }
-        } else {
+        }
+        else {
+  /*
             if ((ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) || (ContextCompat.checkSelfPermission(EnterUserInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED)) {
@@ -279,7 +281,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
             else {
                 Log.d(TAG, "OnClickSubmitButton:PERMISSION_GRANTED");
             }
-
+*/
             createAccount(email, password);
         }
     }

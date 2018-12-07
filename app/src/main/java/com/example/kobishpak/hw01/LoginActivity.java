@@ -101,10 +101,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.e(TAG, getString(R.string.init_sign_in));
-
-                signIn(m_EmailEditText.getText().toString(), m_PasswordEditText.getText().toString());
+                if(!((m_EmailEditText.getText().toString().isEmpty()) || (m_PasswordEditText.getText().toString().isEmpty()))) {
+                    signIn(m_EmailEditText.getText().toString(), m_PasswordEditText.getText().toString());
+                }
+                else
+                {
+                    Toast.makeText(LoginActivity.this, "Please enter Email Address and Password.", Toast.LENGTH_SHORT).show();
+                }
             }
-            });
+        });
 
         m_CreateAccount.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -166,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void resetPassword() {
-        if (m_EmailEditText.getText() != null) {
+        if (!(m_EmailEditText.getText().toString().isEmpty())) {
             mAuth.sendPasswordResetEmail(m_EmailEditText.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
