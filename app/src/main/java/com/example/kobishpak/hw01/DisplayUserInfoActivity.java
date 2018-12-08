@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -22,8 +23,6 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
     private static final String TAG = "Display";
     private ImageView m_UserImageView;
     private TextView m_UserInfoTextView;
-    private Button m_SendMailButton;
-    private Button m_DialButton;
     private Button m_LogOutButton;
     private FirebaseAuth m_FirebaseAuth;
     private FirebaseUser m_FirebaseUser;
@@ -37,6 +36,13 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         Log.e(TAG, getString(R.string.display_on_create));
 
         initializeInstances();
+
+        m_LogOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLogOutButton();
+            }
+        });
 
         m_FirebaseAuth = FirebaseAuth.getInstance();
         if (m_FirebaseAuth.getCurrentUser() == null)
@@ -66,45 +72,19 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
     private void initializeInstances() {
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
-        m_DialButton = findViewById(R.id.buttonDial);
-        m_SendMailButton = findViewById(R.id.buttonSendMail);
         m_UserImageView = findViewById(R.id.userImageView);
         m_LogOutButton = findViewById(R.id.buttonLogOut);
-        m_LogOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickLogOutButton();
-            }
-        });
     }
 
     private void onClickLogOutButton() {
         m_FirebaseAuth.signOut();
+        LoginManager.getInstance().logOut();
         startActivity(new Intent(DisplayUserInfoActivity.this, LoginActivity.class));
     }
 
     private void DisplayUserInformation() {
 
         Glide.with(DisplayUserInfoActivity.this).load(m_FirebaseUser.getPhotoUrl()).into(m_UserImageView);
-
-        m_DialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + m_FirebaseUser.getPhoneNumber()));
-                startActivity(intent);
-            }
-        });
-
-        m_SendMailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri data = Uri.parse("mailto:" + m_FirebaseUser.getEmail() + "?subject=" + "" + "&body=" + "");
-                intent.setData(data);
-                startActivity(intent);
-            }
-        });
 
         String userText = String.format("Name: %s\nEmail: %s",
                 m_FirebaseUser.getDisplayName(),

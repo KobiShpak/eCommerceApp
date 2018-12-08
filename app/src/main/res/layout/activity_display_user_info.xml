@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
+    android:id="@+id/ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DisplayUserInfoActivity"
@@ -40,45 +41,16 @@
         android:layout_height="161dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="8dp"
         android:lineSpacingExtra="5sp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:textSize="18sp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDial"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userImageView" />
-
-    <Button
-        android:id="@+id/buttonDial"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="12dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/dial"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogOut"
-        app:layout_constraintEnd_toStartOf="@+id/buttonSendMail"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserInfo" />
-
-    <Button
-        android:id="@+id/buttonSendMail"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="49dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/send_mail"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonDial"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonDial"
-        app:layout_constraintTop_toTopOf="@+id/buttonDial" />
 
     <Button
         android:id="@+id/buttonLogOut"
@@ -90,6 +62,5 @@
         android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDial" />
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

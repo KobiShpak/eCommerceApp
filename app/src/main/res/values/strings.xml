@@ -42,6 +42,8 @@
     <string name="password_reset_succeded">Password reset link sent to your mail</string>
     <string name="email_not_found">Email was not found</string>
     <string name="please_enter_email">Email is invalid, please enter your user email in the email field</string>
-    <string name="sign_in_anonymously">Sign In Anonymously</string>
+    <string name="sign_in_anonymously">Skip sign in</string>
+    <string name="forgot_password_text">Please enter your email\na password reset link will send to you</string>
+    <string name="reset_password">Password Reset</string>
 
 </resources>

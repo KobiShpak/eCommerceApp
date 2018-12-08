@@ -1,11 +1,8 @@
 package com.example.kobishpak.hw01;
 
-import android.app.Fragment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,13 +17,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText m_EmailEditText;
     private Button m_SubmitButton;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private boolean doubleBackToExitPressedOnce = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
         m_EmailEditText = findViewById(R.id.emailAddress);
         m_SubmitButton = findViewById(R.id.buttonSubmit);
 
@@ -61,24 +58,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }else {
             Toast.makeText(ForgotPasswordActivity.this, R.string.please_enter_email, Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
     }
 }
