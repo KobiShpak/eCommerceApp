@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (m_FirebaseUser != null) {
-                    Intent splashScreenIntent = new Intent(MainActivity.this, DisplayUserInfoActivity.class);
+                    Intent splashScreenIntent = new Intent(MainActivity.this, AllProductsActivity.class);
                     startActivity(splashScreenIntent);
                     finish();
                 } else {
