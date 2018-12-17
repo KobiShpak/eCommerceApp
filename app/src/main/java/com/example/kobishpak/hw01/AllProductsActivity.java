@@ -73,16 +73,18 @@ public class AllProductsActivity extends AppCompatActivity {
         });
 
         m_FirebaseAuth = FirebaseAuth.getInstance();
-        if (m_FirebaseAuth.getCurrentUser() == null)
+        m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
+
+        if (m_FirebaseUser == null)
         {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
         else {
-            m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
             myUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_FirebaseUser.getUid());
             pleaseWait();
             DisplayUserInformation();
+
             myUserRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -110,8 +112,7 @@ public class AllProductsActivity extends AppCompatActivity {
         booksAdapter = new BooksAdapter(booksList,myUser);
         recyclerView.setAdapter(booksAdapter);
 
-        //getAllBooksUsingValueListenrs();
-        getAllBooksUsingChildListenrs();
+        getAllBooksUsingValueListenrs();
     }
 
     private void getAllBooksUsingValueListenrs() {
@@ -127,7 +128,6 @@ public class AllProductsActivity extends AppCompatActivity {
                 updateBooksList(snapshot);
 
                 Log.e(TAG, "onDataChange(Books) <<");
-
             }
 
             @Override
@@ -136,81 +136,6 @@ public class AllProductsActivity extends AppCompatActivity {
                 Log.e(TAG, "onCancelled(Books) >>" + databaseError.getMessage());
             }
         });
-    }
-    private void getAllBooksUsingChildListenrs() {
-
-        allBooksRef = FirebaseDatabase.getInstance().getReference("Books");
-
-        allBooksRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, String previousChildName){
-
-                Log.e(TAG, "onChildAdded(Books) >> " + snapshot.getKey());
-
-                BookWithKey bookWithKey = new BookWithKey(snapshot.getKey(),snapshot.getValue(Book.class));
-                booksList.add(bookWithKey);
-                recyclerView.getAdapter().notifyDataSetChanged();
-
-                Log.e(TAG, "onChildAdded(Books) <<");
-
-            }
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, String previousChildName){
-
-                Log.e(TAG, "onChildChanged(Books) >> " + snapshot.getKey());
-
-                Book book =snapshot.getValue(Book.class);
-                String key = snapshot.getKey();
-
-                for (int i = 0 ; i < booksList.size() ; i++) {
-                    BookWithKey bookWithKey = booksList.get(i);
-                    if (bookWithKey.getKey().equals(snapshot.getKey())) {
-                        bookWithKey.setBook(book);
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                        break;
-                    }
-                }
-
-                Log.e(TAG, "onChildChanged(Books) <<");
-
-            }
-            @Override
-            public void onChildMoved(DataSnapshot snapshot, String previousChildName){
-
-                Log.e(TAG, "onChildMoved(Books) >> " + snapshot.getKey());
-
-
-                Log.e(TAG, "onChildMoved(Books) << Doing nothing");
-
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot snapshot){
-
-                Log.e(TAG, "onChildRemoved(Books) >> " + snapshot.getKey());
-
-                Book book = snapshot.getValue(Book.class);
-                String key = snapshot.getKey();
-
-                for (int i = 0 ; i < booksList.size() ; i++) {
-                    BookWithKey bookWithKey = (BookWithKey) booksList.get(i);
-                    if (bookWithKey.getKey().equals(snapshot.getKey())) {
-                        booksList.remove(i);
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                        Log.e(TAG, "onChildRemoved(Books) >> i="+i);
-                        break;
-                    }
-                }
-
-                Log.e(TAG, "onChildRemoved(Books) <<");
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                Log.e(TAG, "onCancelled(Books) >>" + databaseError.getMessage());
-            }
-        });
-
     }
 
     private void updateBooksList(DataSnapshot snapshot) {
@@ -222,9 +147,7 @@ public class AllProductsActivity extends AppCompatActivity {
             booksList.add(new BookWithKey(key,book));
         }
         recyclerView.getAdapter().notifyDataSetChanged();
-
     }
-
 
     public void onSearchButtonClick(View v) {
 
@@ -311,7 +234,7 @@ public class AllProductsActivity extends AppCompatActivity {
         String userText;
 
         userText = m_FirebaseUser.getDisplayName() == null ?
-        String.format("Connected as Guest"):
+        "Connected as Guest" :
         String.format("Connected as %s", m_FirebaseUser.getDisplayName()) ;
 
         m_UserInfoTextView.setText(userText);

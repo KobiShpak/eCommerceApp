@@ -2,6 +2,7 @@ package com.example.kobishpak.hw01.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -40,8 +41,9 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         this.user = user;
     }
 
+    @NonNull
     @Override
-    public BookViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Log.e(TAG,"onCreateViewHolder() >>");
 
@@ -53,7 +55,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     }
 
     @Override
-    public void onBindViewHolder(BookViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
 
         Log.e(TAG,"onBindViewHolder() >> " + position);
 
@@ -125,16 +127,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
             super(view);
 
-            bookCardView = (CardView) view.findViewById(R.id.card_view_book);
-            thumbImage = (ImageView) view.findViewById(R.id.book_thumb_image);
-            name = (TextView) view.findViewById(R.id.book_name);
-            artist = (TextView) view.findViewById(R.id.book_reviewer_mail);
-            genre = (TextView) view.findViewById(R.id.book_genre);
-            price = (TextView) view.findViewById(R.id.book_price);
-            reviewsCount = (TextView) view.findViewById(R.id.book_review_count);
-            rating = (RatingBar) view.findViewById(R.id.book_rating);
-
-
+            bookCardView = view.findViewById(R.id.card_view_book);
+            thumbImage =  view.findViewById(R.id.book_thumb_image);
+            name = view.findViewById(R.id.book_name);
+            artist =  view.findViewById(R.id.book_reviewer_mail);
+            genre =  view.findViewById(R.id.book_genre);
+            price =  view.findViewById(R.id.book_price);
+            reviewsCount =  view.findViewById(R.id.book_review_count);
+            rating =  view.findViewById(R.id.book_rating);
 
             this.context = context;
 

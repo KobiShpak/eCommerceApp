@@ -1,6 +1,7 @@
 package com.example.kobishpak.hw01.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     }
 
     @Override
-    public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Log.e(TAG,"onCreateViewHolder() >>");
 
@@ -39,7 +40,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     }
 
     @Override
-    public void onBindViewHolder(ReviewViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
 
         Log.e(TAG,"onBindViewHolder() >> " + position);
 
@@ -67,9 +68,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
         public ReviewViewHolder(Context context, View view) {
 
             super(view);
-            userReview = (TextView) view.findViewById(R.id.user_review);
-            userMail = (TextView) view.findViewById(R.id.user_mail);
-            userRating = (RatingBar) view.findViewById(R.id.user_rating);
+            userReview = view.findViewById(R.id.user_review);
+            userMail =  view.findViewById(R.id.user_mail);
+            userRating = view.findViewById(R.id.user_rating);
 
         }
 
