@@ -45,5 +45,22 @@
     <string name="sign_in_anonymously">Skip sign in</string>
     <string name="forgot_password_text">Please enter your email\na password reset link will send to you</string>
     <string name="reset_password">Password Reset</string>
+    <string name="review_details">[Review Details]</string>
+    <string name="reviewer_mail">[reviewer mail]</string>
+    <string name="book_name">[BOOK NAME]</string>
+    <string name="author">[author]</string>
+    <string name="genere">[genere]</string>
+    <string name="x_x">[$X.X]</string>
+    <string name="todo">TODO</string>
+    <string name="write_a_review">Write a review</string>
+    <string name="name_frame">[Name]</string>
+    <string name="artist">[Artist]</string>
+    <string name="genre">[Genre]</string>
+    <string name="buy_x">[BUY $X]</string>
+    <string name="book_title">Book Title</string>
+    <string name="search">Search</string>
+    <string name="order_by">Order By:</string>
+    <string name="reviews">Reviews</string>
+    <string name="price">Price</string>
 
 </resources>

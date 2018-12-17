@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,7 +85,7 @@ public class AllProductsActivity extends AppCompatActivity {
             DisplayUserInformation();
             myUserRef.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot snapshot) {
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                     Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
 
@@ -93,11 +94,10 @@ public class AllProductsActivity extends AppCompatActivity {
                     getAllBooks();
 
                     Log.e(TAG, "onDataChange(User) <<");
-
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
                 }
@@ -120,7 +120,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
         allBooksRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Log.e(TAG, "onDataChange(Books) >> " + snapshot.getKey());
 
@@ -131,7 +131,7 @@ public class AllProductsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 Log.e(TAG, "onCancelled(Books) >>" + databaseError.getMessage());
             }
@@ -143,7 +143,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
         allBooksRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChildName){
+            public void onChildAdded(@NonNull DataSnapshot snapshot, String previousChildName){
 
                 Log.e(TAG, "onChildAdded(Books) >> " + snapshot.getKey());
 
@@ -155,7 +155,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
             }
             @Override
-            public void onChildChanged(DataSnapshot snapshot, String previousChildName){
+            public void onChildChanged(@NonNull DataSnapshot snapshot, String previousChildName){
 
                 Log.e(TAG, "onChildChanged(Books) >> " + snapshot.getKey());
 
@@ -215,7 +215,6 @@ public class AllProductsActivity extends AppCompatActivity {
 
     private void updateBooksList(DataSnapshot snapshot) {
 
-
         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
             Book book = dataSnapshot.getValue(Book.class);
             Log.e(TAG, "updateBookList() >> adding book: " + book.getName());
@@ -237,7 +236,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
         booksList.clear();
 
-        if (searchString != null && !searchString.isEmpty()) {
+        if (!searchString.isEmpty()) {
             searchBook = allBooksRef.orderByChild("name").startAt(searchString).endAt(searchString + "\uf8ff");
         } else {
             searchBook = allBooksRef.orderByChild(orderBy);
@@ -246,7 +245,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
         searchBook.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
 
@@ -257,7 +256,7 @@ public class AllProductsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 Log.e(TAG, "onCancelled() >>" + databaseError.getMessage());
             }

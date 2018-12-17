@@ -33,7 +33,8 @@
                 android:src="@color/colorAccent"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:id="@+id/book_name"
@@ -41,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="[BOOK NAME]"
+                android:text="@string/book_name"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -53,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="[author]"
+                android:text="@string/author"
                 android:textColor="@android:color/holo_blue_dark"
                 card_view:layout_constraintStart_toEndOf="@+id/book_thumb_image"
                 card_view:layout_constraintTop_toBottomOf="@+id/book_name" />
@@ -63,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="[genere]"
+                android:text="@string/genere"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="14sp"
                 card_view:layout_constraintStart_toEndOf="@+id/book_thumb_image"
@@ -86,7 +87,7 @@
                 android:layout_width="66dp"
                 android:layout_height="32dp"
                 android:layout_marginEnd="8dp"
-                android:text="[$X.X]"
+                android:text="@string/x_x"
                 android:textAlignment="center"
                 android:textColor="@android:color/holo_green_dark"
                 android:textSize="24sp"
