@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.kobishpak.hw01.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -305,6 +306,10 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                                         .build());
                             }
 
+                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                            userRef.child(user.getUid()).setValue(new User(user.getEmail(),
+                                    0,null));
+
                             Toast.makeText(EnterUserInfoActivity.this, "Successfully registered", Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
 
@@ -315,7 +320,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EnterUserInfoActivity.this, "Registration failed.",
+                            Toast.makeText(EnterUserInfoActivity.this, "Registration failed. \n Please make sure this user does not already exist.",
                                     Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }

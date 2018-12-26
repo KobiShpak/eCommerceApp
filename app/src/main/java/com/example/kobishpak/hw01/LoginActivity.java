@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kobishpak.hw01.model.User;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,6 +33,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
@@ -43,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "FACELOG";
     private String[] m_FacebookPermissions = {"email", "public_profile"};
     private FirebaseAuth mAuth;
-
     private EditText m_EmailEditText;
     private EditText m_PasswordEditText;
     private Button m_LoginButton;
@@ -233,7 +238,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
+                            checkIfUserExists();
                             LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(m_FacebookPermissions));
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
                         } else {
@@ -258,6 +263,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            checkIfUserExists();
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -265,5 +271,43 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void createNewUserFacebookAndGoogle() {
+
+        Log.e(TAG, "createNewUser() >>");
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+
+        if (user == null) {
+            Log.e(TAG, "createNewUser() << Error user is null");
+            return;
+        }
+        userRef.child(user.getUid()).setValue(new User(user.getEmail(),
+                0,null));
+
+        Log.e(TAG, "createNewUser() <<");
+    }
+
+    private void checkIfUserExists()
+    {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference uidRef = rootRef.child("Users").child(uid);
+        Log.e(TAG, "**** uidRef" + uidRef.toString());
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()) {
+                    Log.e(TAG, "**** uidRef Not exists <<----" );
+                    createNewUserFacebookAndGoogle();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        uidRef.addListenerForSingleValueEvent(eventListener);
     }
 }

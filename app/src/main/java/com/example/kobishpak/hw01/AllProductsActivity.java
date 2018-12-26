@@ -113,6 +113,7 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.setAdapter(booksAdapter);
 
         getAllBooksUsingValueListenrs();
+
     }
 
     private void getAllBooksUsingValueListenrs() {
