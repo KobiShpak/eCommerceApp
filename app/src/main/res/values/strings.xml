@@ -57,7 +57,7 @@
     <string name="artist">[Artist]</string>
     <string name="genre">[Genre]</string>
     <string name="buy_x">[BUY $X]</string>
-    <string name="book_title">Book Title</string>
+    <string name="book_title">Search For A Book Title</string>
     <string name="search">Search</string>
     <string name="order_by">Order By:</string>
     <string name="reviews">Reviews</string>

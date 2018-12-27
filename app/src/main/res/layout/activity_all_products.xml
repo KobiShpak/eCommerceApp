@@ -75,18 +75,6 @@
                             tools:layout_editor_absoluteY="8dp"
                             tools:targetApi="o" />
 
-                        <Button
-                            android:id="@+id/button_search"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:layout_weight="1"
-                            android:onClick="onSearchButtonClick"
-                            android:text="@string/search"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textViewUserInfo"
-                            app:layout_constraintVertical_bias="0.0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -96,44 +84,41 @@
 
                         <TextView
                             android:id="@+id/textViewOrderBy"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:text="@string/order_by"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/button_search" />
+                            app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
 
                         <RadioButton
                             android:id="@+id/radioButtonByPrice"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:checked="true"
                             android:onClick="onRadioButtonCLick"
                             android:text="@string/price"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/radioButtonByReviews"
                             app:layout_constraintStart_toEndOf="@+id/textViewOrderBy" />
 
                         <RadioButton
                             android:id="@+id/radioButtonByReviews"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:onClick="onRadioButtonCLick"
                             android:text="@string/reviews"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/button_search" />
+                            app:layout_constraintStart_toEndOf="@id/radioButtonByPrice"
+                            app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
 
                     </LinearLayout>
 
@@ -148,25 +133,22 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/books_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="575dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogOut"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonLogOut"
-        android:layout_width="160dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@android:color/holo_red_dark"
-        android:text="@string/logout"
+        android:src="@mipmap/ic_launcher"
         android:textColor="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

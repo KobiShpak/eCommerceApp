@@ -9,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -42,7 +45,8 @@ public class AllProductsActivity extends AppCompatActivity {
     private static final String TAG = "DisplayBooks";
     private ImageView m_UserImageView;
     private TextView m_UserInfoTextView;
-    private Button m_LogOutButton;
+    private ImageButton m_LogOutButton;
+    private EditText m_SearchEditText;
 
     private DatabaseReference allBooksRef;
     private DatabaseReference myUserRef;
@@ -69,6 +73,22 @@ public class AllProductsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickLogOutButton();
+            }
+        });
+
+        m_SearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                showFilteredBooks();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -107,56 +127,13 @@ public class AllProductsActivity extends AppCompatActivity {
         }
     }
 
-    private void getAllBooks() {
-        booksList.clear();
-        booksAdapter = new BooksAdapter(booksList,myUser);
-        recyclerView.setAdapter(booksAdapter);
-
-        getAllBooksUsingValueListenrs();
-
-    }
-
-    private void getAllBooksUsingValueListenrs() {
-
-        allBooksRef = FirebaseDatabase.getInstance().getReference("Books");
-
-        allBooksRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                Log.e(TAG, "onDataChange(Books) >> " + snapshot.getKey());
-
-                updateBooksList(snapshot);
-
-                Log.e(TAG, "onDataChange(Books) <<");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Log.e(TAG, "onCancelled(Books) >>" + databaseError.getMessage());
-            }
-        });
-    }
-
-    private void updateBooksList(DataSnapshot snapshot) {
-
-        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-            Book book = dataSnapshot.getValue(Book.class);
-            Log.e(TAG, "updateBookList() >> adding book: " + book.getName());
-            String key = dataSnapshot.getKey();
-            booksList.add(new BookWithKey(key,book));
-        }
-        recyclerView.getAdapter().notifyDataSetChanged();
-    }
-
-    public void onSearchButtonClick(View v) {
-
+    private void showFilteredBooks()
+    {
         String searchString = ((EditText)findViewById(R.id.edit_text_search_book)).getText().toString();
-        String orderBy = ((RadioButton)findViewById(R.id.radioButtonByReviews)).isChecked() ? "reviewsCount" : "price";
+        String orderBy = ((RadioButton)findViewById(R.id.radioButtonByReviews)).isChecked() ? "rating" : "price";
         Query searchBook;
 
-        Log.e(TAG, "onSearchButtonClick() >> searchString="+searchString+ ",orderBy="+orderBy);
+        Log.e(TAG, "onSearchTextChange() >> searchString="+searchString+ ",orderBy="+orderBy);
 
         booksList.clear();
 
@@ -186,7 +163,52 @@ public class AllProductsActivity extends AppCompatActivity {
             }
 
         });
-        Log.e(TAG, "onSearchButtonClick() <<");
+        Log.e(TAG, "onSearchTextChange() <<");
+
+    }
+
+    private void getAllBooks() {
+        booksList.clear();
+        booksAdapter = new BooksAdapter(booksList,myUser);
+        recyclerView.setAdapter(booksAdapter);
+
+        getAllBooksUsingValueListenrs();
+
+    }
+
+    private void getAllBooksUsingValueListenrs() {
+
+        allBooksRef = FirebaseDatabase.getInstance().getReference("Books");
+        Query searchBook = allBooksRef.orderByChild("price");
+
+        searchBook.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Log.e(TAG, "onDataChange(Books) >> " + snapshot.getKey());
+
+                updateBooksList(snapshot);
+
+                Log.e(TAG, "onDataChange(Books) <<");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Log.e(TAG, "onCancelled(Books) >>" + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void updateBooksList(DataSnapshot snapshot) {
+
+        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+            Book book = dataSnapshot.getValue(Book.class);
+            Log.e(TAG, "updateBookList() >> adding book: " + book.getName());
+            String key = dataSnapshot.getKey();
+            booksList.add(new BookWithKey(key, book));
+        }
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public void onRadioButtonCLick(View v) {
@@ -198,6 +220,7 @@ public class AllProductsActivity extends AppCompatActivity {
                 ((RadioButton)findViewById(R.id.radioButtonByPrice)).setChecked(false);
                 break;
         }
+        showFilteredBooks();
     }
 
     private void pleaseWait() {
@@ -216,6 +239,7 @@ public class AllProductsActivity extends AppCompatActivity {
     private void initializeInstances() {
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_UserImageView = findViewById(R.id.userImageView);
+        m_SearchEditText = findViewById(R.id.edit_text_search_book);
         m_LogOutButton = findViewById(R.id.buttonLogOut);
         recyclerView = findViewById(R.id.books_list);
         recyclerView.setHasFixedSize(true);
