@@ -114,26 +114,31 @@ public class AllProductsActivity extends AppCompatActivity {
             myUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_FirebaseUser.getUid());
             pleaseWait();
             DisplayUserInformation();
+            if (m_FirebaseUser.getDisplayName() != null) {
+                myUserRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-            myUserRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
 
-                    Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
+                        myUser = snapshot.getValue(User.class);
 
-                    myUser = snapshot.getValue(User.class);
+                        getAllBooks();
 
-                    getAllBooks();
+                        Log.e(TAG, "onDataChange(User) <<");
+                    }
 
-                    Log.e(TAG, "onDataChange(User) <<");
-                }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
-                }
-            });
+                        Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
+                    }
+                });
+            }
+            else {
+                myUser = new User();
+                getAllBooks();
+            }
         }
 
         spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
