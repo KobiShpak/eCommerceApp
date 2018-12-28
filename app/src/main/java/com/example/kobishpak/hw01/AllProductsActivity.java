@@ -13,11 +13,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class AllProductsActivity extends AppCompatActivity {
     private static final String TAG = "DisplayBooks";
     private ImageView m_UserImageView;
     private TextView m_UserInfoTextView;
-    private ImageButton m_LogOutButton;
+    private TextView m_textViewSignOut;
     private EditText m_SearchEditText;
 
     private DatabaseReference allBooksRef;
@@ -61,6 +64,9 @@ public class AllProductsActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private ProgressDialog progressDialog;
 
+    private Spinner spinnerOrderBy;
+    private Spinner spinnerFilterBy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +75,16 @@ public class AllProductsActivity extends AppCompatActivity {
 
         initializeInstances();
 
-        m_LogOutButton.setOnClickListener(new View.OnClickListener() {
+        ((RadioButton)findViewById(R.id.radioButtonByReviews)).setChecked(false);
+        ((RadioButton)findViewById(R.id.radioButtonByPrice)).setChecked(false);
+
+        m_textViewSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickLogOutButton();
             }
         });
+
 
         m_SearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,6 +135,43 @@ public class AllProductsActivity extends AppCompatActivity {
                 }
             });
         }
+
+        spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = parent.getSelectedItem().toString();
+                switch (selected) {
+                    case "Price: Low to High":
+                        Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Price: High to Low":
+                        Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Rating: High to Low":
+                        Toast.makeText(AllProductsActivity.this, "call 'sort by rating", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        spinnerFilterBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = parent.getSelectedItem().toString();
+                if(selected == "Rating: Top rated only") {
+                    Toast.makeText(AllProductsActivity.this, "call 'filter by top rating", Toast.LENGTH_SHORT).show();
+                }
+                else if(selected != "All") {
+                    Toast.makeText(AllProductsActivity.this, "call 'filter by" + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
     }
 
     private void showFilteredBooks()
@@ -211,7 +258,9 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
+
     public void onRadioButtonCLick(View v) {
+        /*
         switch (v.getId()) {
             case R.id.radioButtonByPrice:
                 ((RadioButton)findViewById(R.id.radioButtonByReviews)).setChecked(false);
@@ -221,7 +270,9 @@ public class AllProductsActivity extends AppCompatActivity {
                 break;
         }
         showFilteredBooks();
+        */
     }
+
 
     private void pleaseWait() {
         progressDialog = new ProgressDialog(this);
@@ -240,11 +291,14 @@ public class AllProductsActivity extends AppCompatActivity {
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_UserImageView = findViewById(R.id.userImageView);
         m_SearchEditText = findViewById(R.id.edit_text_search_book);
-        m_LogOutButton = findViewById(R.id.buttonLogOut);
+        m_textViewSignOut = findViewById(R.id.textViewSignOut);
         recyclerView = findViewById(R.id.books_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        spinnerOrderBy = findViewById(R.id.spinnerOrderBy);
+        spinnerFilterBy = findViewById(R.id.spinnerFilterBy);
     }
 
     private void onClickLogOutButton() {
@@ -254,13 +308,17 @@ public class AllProductsActivity extends AppCompatActivity {
     }
 
     private void DisplayUserInformation() {
+        if(m_FirebaseUser.getPhotoUrl() != null) {
+            Glide.with(AllProductsActivity.this).load(m_FirebaseUser.getPhotoUrl()).into(m_UserImageView);
+        }
+        else {
+            m_UserImageView.setImageResource(R.drawable.anonymous_user_image);
+        }
 
-        Glide.with(AllProductsActivity.this).load(m_FirebaseUser.getPhotoUrl()).into(m_UserImageView);
         String userText;
-
         userText = m_FirebaseUser.getDisplayName() == null ?
-        "Connected as Guest" :
-        String.format("Connected as %s", m_FirebaseUser.getDisplayName()) ;
+        "Hello" :
+        String.format("Hello %s", m_FirebaseUser.getDisplayName()) ;
 
         m_UserInfoTextView.setText(userText);
     }

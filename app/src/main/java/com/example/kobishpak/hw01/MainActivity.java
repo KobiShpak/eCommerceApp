@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(splashScreenIntent);
                     finish();
                 } else {
-                    Intent splashScreenIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    //Intent splashScreenIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    Intent splashScreenIntent = new Intent(MainActivity.this, AllProductsActivity.class);
                     startActivity(splashScreenIntent);
                     finish();
                 }

@@ -76,11 +76,12 @@ public class BookDetailsActivity extends AppCompatActivity {
                 .child("thumbs/" + book.getThumbImage());
 
         // Load the image using Glide
-        Glide.with(this)
+        /*Glide.with(this)
                 //.using(new FirebaseImageLoader())
                 .load(thumbRef)
                 .into((ImageView) findViewById(R.id.imageViewBook));
-
+        */
+        ((ImageView) findViewById(R.id.imageViewBook)).setImageResource(R.drawable.book_image);
         ((TextView) findViewById(R.id.textViewName)).setText(book.getName());
         ((TextView) findViewById(R.id.textViewArtist)).setText(book.getArtist());
         ((TextView) findViewById(R.id.textViewGenre)).setText(book.getGenre());

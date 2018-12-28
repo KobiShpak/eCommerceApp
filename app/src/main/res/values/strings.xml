@@ -25,6 +25,7 @@
     <string name="send_mail">Send Mail</string>
     <string name="dial">Dial</string>
     <string name="logout">LOG OUT</string>
+    <string name="signOut">Sign Out</string>
 
     <string name="name">Name</string>
     <string name="email">Email</string>
@@ -60,7 +61,28 @@
     <string name="book_title">Search For A Book Title</string>
     <string name="search">Search</string>
     <string name="order_by">Order By:</string>
+    <string name="filter_by">Filter By:</string>
     <string name="reviews">Reviews</string>
     <string name="price">Price</string>
+    
+    <string-array name="order_options">
+        <item>Price: Low to High</item>
+        <item>Price: High to Low</item>
+        <item>Rating: High to Low</item>
+    </string-array>
+
+    <string-array name="filter_options">
+        <item>All</item>
+        <item>Rating: Top rated only</item>
+        <item>Genre: Thriller</item>
+        <item>Genre: Horror</item>
+        <item>Genre: Comedy</item>
+        <item>Genre: Fantasy</item>
+        <item>Genre: Historical</item>
+        <item>Genre: Sci-Fi</item>
+        <item>Genre: Romantic</item>
+        <item>Genre: Drama</item>
+    </string-array>
+
 
 </resources>
