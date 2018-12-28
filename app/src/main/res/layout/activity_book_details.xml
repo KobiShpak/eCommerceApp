@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookDetailsActivity">
+    tools:context=".BookDetailsActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <FrameLayout
         android:id="@+id/filter_bar_container"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="2dp"
         android:background="@android:color/darker_gray"
-        android:paddingBottom="12dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:paddingBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/book_reviews"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
@@ -40,65 +44,66 @@
 
             <TextView
                 android:id="@+id/textViewArtist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_width="53dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="37dp"
                 android:text="@string/artist"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/common_google_signin_btn_text_light_pressed"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textViewName"
-                app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewBook" />
 
             <TextView
                 android:id="@+id/textViewGenre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_width="52dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/genre"
                 android:textColor="@android:color/holo_orange_dark"
                 android:textStyle="bold"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textViewArtist"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewArtist" />
 
             <Button
                 android:id="@+id/buttonBuyPlay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="96dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="16dp"
                 android:background="@android:color/holo_orange_light"
                 android:text="@string/buy_x"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.977"
+                app:layout_constraintStart_toEndOf="@+id/textViewArtist" />
 
             <ImageView
                 android:id="@+id/imageViewBook"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="32dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="23dp"
+                android:contentDescription="@string/todo"
                 android:src="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@+id/textViewArtist"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/todo" />
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </FrameLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/book_reviews"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="75dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter_bar_container" />
 
 
