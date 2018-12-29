@@ -24,7 +24,7 @@
     <string name="user_details">User Details:</string>
     <string name="send_mail">Send Mail</string>
     <string name="dial">Dial</string>
-    <string name="logout">LOG OUT</string>
+    <string name="logout">Logout</string>
     <string name="signOut">Sign Out</string>
 
     <string name="name">Name</string>
@@ -64,6 +64,8 @@
     <string name="filter_by">Filter By:</string>
     <string name="reviews">Reviews</string>
     <string name="price">Price</string>
+    <string name="settings">Settings</string>
+
     
     <string-array name="order_options">
         <item>Price: Low to High</item>

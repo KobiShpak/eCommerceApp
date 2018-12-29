@@ -5,13 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -48,9 +54,8 @@ public class AllProductsActivity extends AppCompatActivity {
     private static final String TAG = "DisplayBooks";
     private ImageView m_UserImageView;
     private TextView m_UserInfoTextView;
-    private TextView m_textViewSignOut;
     private EditText m_SearchEditText;
-
+    private TextView m_LogoutTextView;
     private DatabaseReference allBooksRef;
     private DatabaseReference myUserRef;
 
@@ -63,7 +68,8 @@ public class AllProductsActivity extends AppCompatActivity {
     private FirebaseUser m_FirebaseUser;
     private boolean doubleBackToExitPressedOnce = false;
     private ProgressDialog progressDialog;
-
+    private DrawerLayout m_DrawerLayout;
+    private NavigationView m_NavigationView;
     private Spinner spinnerOrderBy;
     private Spinner spinnerFilterBy;
 
@@ -75,17 +81,17 @@ public class AllProductsActivity extends AppCompatActivity {
 
         initializeInstances();
 
-        ((RadioButton)findViewById(R.id.radioButtonByReviews)).setChecked(false);
-        ((RadioButton)findViewById(R.id.radioButtonByPrice)).setChecked(false);
-
-        m_textViewSignOut.setOnClickListener(new View.OnClickListener() {
+        m_NavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                onClickLogOutButton();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                // set item as selected to persist highlight
+                menuItem.setChecked(true);
+                // close drawer when item is tapped
+                m_DrawerLayout.closeDrawers();
+
+                return true;
             }
         });
-
-
         m_SearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -141,19 +147,20 @@ public class AllProductsActivity extends AppCompatActivity {
             }
         }
 
+        /*
         spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = parent.getSelectedItem().toString();
                 switch (selected) {
                     case "Price: Low to High":
-                        Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
                         break;
                     case "Price: High to Low":
-                        Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
                         break;
                     case "Rating: High to Low":
-                        Toast.makeText(AllProductsActivity.this, "call 'sort by rating", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(AllProductsActivity.this, "call 'sort by rating", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
@@ -177,6 +184,7 @@ public class AllProductsActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
+        */
     }
 
     private void showFilteredBooks()
@@ -265,7 +273,6 @@ public class AllProductsActivity extends AppCompatActivity {
 
 
     public void onRadioButtonCLick(View v) {
-        /*
         switch (v.getId()) {
             case R.id.radioButtonByPrice:
                 ((RadioButton)findViewById(R.id.radioButtonByReviews)).setChecked(false);
@@ -275,7 +282,6 @@ public class AllProductsActivity extends AppCompatActivity {
                 break;
         }
         showFilteredBooks();
-        */
     }
 
 
@@ -293,17 +299,31 @@ public class AllProductsActivity extends AppCompatActivity {
     }
 
     private void initializeInstances() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_portrait_black_24dp);
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_UserImageView = findViewById(R.id.userImageView);
         m_SearchEditText = findViewById(R.id.edit_text_search_book);
-        m_textViewSignOut = findViewById(R.id.textViewSignOut);
+        m_DrawerLayout = findViewById(R.id.drawer_layout);
+        m_NavigationView = findViewById(R.id.navigation_view);
+        m_LogoutTextView = findViewById(R.id.logout);
         recyclerView = findViewById(R.id.books_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
 
-        spinnerOrderBy = findViewById(R.id.spinnerOrderBy);
-        spinnerFilterBy = findViewById(R.id.spinnerFilterBy);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                m_DrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void onClickLogOutButton() {

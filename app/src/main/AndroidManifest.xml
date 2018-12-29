@@ -30,6 +30,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".AllProductsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
