@@ -76,12 +76,21 @@ public class AllProductsActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                findViewById(R.id.radioButtonByRating).setEnabled(false);
+                findViewById(R.id.radioButtonByPrice).setEnabled(false);
+                mHidePurchasedSwitch.setEnabled(false);
+
                 showFilteredBooks();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s.length() == 0) {
+                    findViewById(R.id.radioButtonByRating).setEnabled(true);
+                    findViewById(R.id.radioButtonByPrice).setEnabled(true);
+                    mHidePurchasedSwitch.setEnabled(true);
+                }
             }
         });
 
@@ -157,11 +166,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
                 Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
 
-                if (mHidePurchasedSwitch.isChecked()) {
-                    showPurchesdBooks(snapshot);
-                } else {
-                    updateBooksList(snapshot);
-                }
+                updateBooksList(snapshot);
 
                 Log.e(TAG, "onDataChange(Query) <<");
 
@@ -244,7 +249,7 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
-    public void onRadioButtonCLick(View v) {
+    public void onRadioButtonClick(View v) {
         switch (v.getId()) {
             case R.id.radioButtonByPrice:
                 ((RadioButton)findViewById(R.id.radioButtonByRating)).setChecked(false);

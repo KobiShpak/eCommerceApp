@@ -90,7 +90,7 @@
                         android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:onClick="onRadioButtonCLick"
+                        android:onClick="onRadioButtonClick"
                         android:text="@string/price"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textViewOrderBy" />
@@ -101,7 +101,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="5dp"
                         android:layout_weight="1"
-                        android:onClick="onRadioButtonCLick"
+                        android:onClick="onRadioButtonClick"
                         android:text="@string/ratings"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
