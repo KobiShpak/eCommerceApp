@@ -105,7 +105,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewArtist)).setText(book.getArtist());
         ((TextView) findViewById(R.id.textViewGenre)).setText(book.getGenre());
         buy = findViewById(R.id.buttonBuy);
-        if (user.isAnonymous())
+        if (user.getEmail().isEmpty())
         {
             Toast.makeText(BookDetailsActivity.this, "In order to purchase a Book, you must log in first.",Toast.LENGTH_LONG).show();
             buy.setText("Login");
@@ -128,7 +128,7 @@ public class BookDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.e(TAG, "buy.onClick() >> file=" + book.getName());
-                if (!user.isAnonymous()) {
+                if (!user.getEmail().isEmpty()) {
                     if (bookWasPurchased) {
                         Log.e(TAG, "buy.onClick() >> Downloading purchased book");
                         //User purchased the book so he can download it

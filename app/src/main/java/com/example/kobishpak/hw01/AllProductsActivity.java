@@ -97,7 +97,8 @@ public class AllProductsActivity extends AppCompatActivity {
             myUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_FirebaseUser.getUid());
             pleaseWait();
             DisplayUserInformation();
-            if (m_FirebaseUser.getDisplayName() != null) {
+
+            if (!m_FirebaseUser.getDisplayName().isEmpty()) {
                 myUserRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -157,7 +158,7 @@ public class AllProductsActivity extends AppCompatActivity {
                 Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
 
                 if (mHidePurchasedSwitch.isChecked()) {
-                    hidePurchesdBooks(snapshot);
+                    showPurchesdBooks(snapshot);
                 } else {
                     updateBooksList(snapshot);
                 }
@@ -196,7 +197,7 @@ public class AllProductsActivity extends AppCompatActivity {
                 Log.e(TAG, "onDataChange(Books) >> " + snapshot.getKey());
 
                 if (mHidePurchasedSwitch.isChecked()) {
-                    hidePurchesdBooks(snapshot);
+                    showPurchesdBooks(snapshot);
                 } else {
                     updateBooksList(snapshot);
                 }
@@ -224,7 +225,7 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
-    private void hidePurchesdBooks(DataSnapshot snapshot) {
+    private void showPurchesdBooks(DataSnapshot snapshot) {
 
         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
             Book book = dataSnapshot.getValue(Book.class);

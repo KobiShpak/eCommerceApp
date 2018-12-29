@@ -14,6 +14,7 @@ public class User implements Parcelable {
     private List<String> myBooks = new ArrayList<>();
 
     public User() {
+        this.email = "";
     }
 
     public User(String email, int totalPurchase, List<String> myBooks) {
@@ -25,7 +26,6 @@ public class User implements Parcelable {
     public String getEmail() {
         return email;
     }
-
 
     public void upgdateTotalPurchase(int newPurcahsePrice) {
         this.totalPurchase += newPurcahsePrice;
