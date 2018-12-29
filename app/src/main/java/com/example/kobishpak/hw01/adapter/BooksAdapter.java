@@ -2,6 +2,7 @@ package com.example.kobishpak.hw01.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -20,6 +21,7 @@ import com.example.kobishpak.hw01.R;
 import com.example.kobishpak.hw01.model.Book;
 import com.example.kobishpak.hw01.model.User;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -55,23 +57,29 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final BookViewHolder holder, int position) {
 
         Log.e(TAG,"onBindViewHolder() >> " + position);
 
         Book book = booksList.get(position).getBook();
         String bookKey = booksList.get(position).getKey();
 
-
         StorageReference thumbRef = FirebaseStorage
                 .getInstance()
                 .getReference()
-                .child("thumbs/"+book.getThumbImage());
-        // Load the image using Glide
-        Glide.with(holder.getContext())
-               // .using(new FirebaseImageLoader())
-                .load(thumbRef)
+                .child("Thumbs/" + book.getThumbImage());
+
+        thumbRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                // Load the image using Glide
+                Glide.with(holder.getContext())
+                .load(uri)
                 .into(holder.getThumbImage());
+                Log.e(TAG, "DownloadCurrentBook() << SUCCESS");
+            }
+        });
 
         holder.setSelectedBook(book);
         holder.setSelectedBookKey(bookKey);
@@ -80,7 +88,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         holder.getGenre().setText(book.getGenre());
         holder.getArtist().setText(book.getArtist());
 
-        holder.setThumbFile(book.getThumbImage());
         if (book.getReviewsCount() >0) {
             holder.getReviewsCount().setText("("+book.getReviewsCount()+")");
             holder.getRating().setRating((float)(book.getRating() / book.getReviewsCount()));
@@ -107,7 +114,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
-
 
         private CardView bookCardView;
         private ImageView thumbImage;

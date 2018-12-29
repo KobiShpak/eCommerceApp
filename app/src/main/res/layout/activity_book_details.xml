@@ -32,8 +32,8 @@
                 android:id="@+id/textViewName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="52dp"
                 android:text="@string/name_frame"
                 android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
@@ -41,6 +41,23 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageViewBook"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewName2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/description"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/buttonBuy"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewBook"
+                app:layout_constraintTop_toBottomOf="@+id/textViewName"
+                app:layout_constraintVertical_bias="0.2" />
 
             <TextView
                 android:id="@+id/textViewArtist"
@@ -53,8 +70,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewBook" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textViewGenre"
@@ -62,14 +78,16 @@
                 android:layout_height="20dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/genre"
                 android:textColor="@android:color/holo_orange_dark"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewArtist" />
 
             <Button
-                android:id="@+id/buttonBuyPlay"
+                android:id="@+id/buttonBuy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
@@ -84,8 +102,8 @@
             <ImageView
                 android:id="@+id/imageViewBook"
                 android:layout_width="100dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="36dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="23dp"
                 android:contentDescription="@string/todo"
                 android:src="@color/colorAccent"
@@ -100,7 +118,7 @@
         android:id="@+id/book_reviews"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="75dp"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,18 +1,24 @@
 package com.example.kobishpak.hw01;
 
+import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
+
+import android.content.pm.PackageManager;
 import android.net.Uri;
+
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,13 +51,12 @@ public class BookDetailsActivity extends AppCompatActivity {
     private String key;
     private User user;
 
-    private Button buyPlay;
-    private MediaPlayer mediaPlayer;
+    private Button buy;
     private RecyclerView recyclerViewBookReviews;
 
     private DatabaseReference bookReviewsRef;
-
-    private List<Review> reviewsList =  new ArrayList<>();
+    private StorageReference mBookStorage;
+    private List<Review> reviewsList = new ArrayList<>();
 
     private boolean bookWasPurchased;
 
@@ -66,61 +71,63 @@ public class BookDetailsActivity extends AppCompatActivity {
         key = getIntent().getStringExtra("key");
         book = getIntent().getParcelableExtra("book");
         user = getIntent().getParcelableExtra("user");
-
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mBookStorage = FirebaseStorage.getInstance().getReference().child(("Books/"));
 
         StorageReference thumbRef = FirebaseStorage
                 .getInstance()
                 .getReference()
-                .child("thumbs/" + book.getThumbImage());
+                .child("Thumbs/" + book.getThumbImage());
 
-        // Load the image using Glide
-        /*Glide.with(this)
-                //.using(new FirebaseImageLoader())
-                .load(thumbRef)
-                .into((ImageView) findViewById(R.id.imageViewBook));
-        */
-        ((ImageView) findViewById(R.id.imageViewBook)).setImageResource(R.drawable.book_image);
+        thumbRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                // Load the image using Glide
+                Glide.with(BookDetailsActivity.this)
+                        .load(uri)
+                        .into((ImageView) findViewById(R.id.imageViewBook));
+                Log.e(TAG, "DownloadCurrentBook() << SUCCESS");
+            }
+        });
+
         ((TextView) findViewById(R.id.textViewName)).setText(book.getName());
         ((TextView) findViewById(R.id.textViewArtist)).setText(book.getArtist());
         ((TextView) findViewById(R.id.textViewGenre)).setText(book.getGenre());
-        buyPlay = ((Button) findViewById(R.id.buttonBuyPlay));
+        buy = findViewById(R.id.buttonBuy);
 
-        buyPlay.setText("BUY $" + book.getPrice());
+        buy.setText("BUY $" + book.getPrice());
         Iterator i = user.getMyBooks().iterator();
         while (i.hasNext()) {
             if (i.next().equals(key)) {
                 bookWasPurchased = true;
-                buyPlay.setText("PLAY");
+                buy.setText(R.string.download);
                 break;
             }
         }
 
-
-        buyPlay.setOnClickListener(new View.OnClickListener() {
+        buy.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                Log.e(TAG, "buyPlay.onClick() >> file=" + book.getName());
+                Log.e(TAG, "buy.onClick() >> file=" + book.getName());
 
                 if (bookWasPurchased) {
-                    Log.e(TAG, "buyPlay.onClick() >> Playing purchased book");
-                    //User purchased the book so he can play it
-                    playCurrentBook(book.getFile());
+                    Log.e(TAG, "buy.onClick() >> Downloading purchased book");
+                    //User purchased the book so he can download it
+                    downloadCurrentBook(book.getFile());
 
                 } else {
                     //Purchase the book.
-                    Log.e(TAG, "buyPlay.onClick() >> Purchase the book");
+                    Log.e(TAG, "buy.onClick() >> Purchase the book");
                     user.getMyBooks().add(key);
                     user.upgdateTotalPurchase(book.getPrice());
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
                     userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
                     bookWasPurchased = true;
-                    buyPlay.setText("PLAY");
+                    buy.setText(R.string.download);
                 }
-                Log.e(TAG, "playBook.onClick() <<");
+                Log.e(TAG, "DownloadBook.onClick() <<");
             }
         });
 
@@ -137,7 +144,7 @@ public class BookDetailsActivity extends AppCompatActivity {
 
         bookReviewsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Log.e(TAG, "onDataChange() >> Books/" + key);
 
@@ -151,7 +158,7 @@ public class BookDetailsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 Log.e(TAG, "onCancelled(Review) >>" + databaseError.getMessage());
             }
@@ -160,57 +167,36 @@ public class BookDetailsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopPlayingCurrentBook();
+    private void downloadCurrentBook(String bookFile) {
+
+        StorageReference BookReference = mBookStorage.child(bookFile);
+        Log.e(TAG, "DownloadCurrentBook() >> bookFile=" + BookReference);
+
+        final String bookName = bookFile;
+        BookReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                saveFile(uri, bookName);
+                Log.e(TAG, "DownloadCurrentBook() << SUCCESS");
+            }
+        });
     }
 
-    private void playCurrentBook(String bookFile) {
+    void saveFile(Uri uri, String bookFile)
+    {
+        DownloadManager downloadmanager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
-        Log.e(TAG, "playCurrentBook() >> bookFile=" + bookFile);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
+                DownloadManager.Request.NETWORK_MOBILE);
+        request.allowScanningByMediaScanner();
+        request.setTitle("Book");
+        request.setDescription("Downloading");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, bookFile);
+        request.setMimeType("*/*");
 
-        if (stopPlayingCurrentBook()) {
-            Log.e(TAG, "playCurrentBook() << Stop playing current book");
-            return;
-        }
-
-        FirebaseStorage.getInstance()
-                .getReference("books/" + bookFile)
-                .getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri downloadUrl) {
-                        Log.e(TAG, "onSuccess() >> " + downloadUrl.toString());
-
-                        try {
-
-                            mediaPlayer.setDataSource(downloadUrl.toString());
-                            mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                            mediaPlayer.start();
-                            buyPlay.setText("STOP");
-
-
-                        } catch (Exception e) {
-                            Log.w(TAG, "playBook() error:" + e.getMessage());
-                        }
-
-                        Log.e(TAG, "onSuccess() <<");
-                    }
-                });
-        Log.e(TAG, "playCurrentBook() << ");
-    }
-
-    private boolean stopPlayingCurrentBook() {
-
-        if (mediaPlayer.isPlaying()) {
-            Log.e(TAG, "onSuccess() >> Stop the media player");
-            //Stop the media player
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-            buyPlay.setText("PLAY");
-            return true;
-        }
-        return false;
+        downloadmanager.enqueue(request);
     }
 }
