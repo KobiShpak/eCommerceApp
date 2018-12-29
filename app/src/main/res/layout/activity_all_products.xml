@@ -73,7 +73,7 @@
 
                         <TextView
                             android:id="@+id/textViewUserInfo"
-                            android:layout_width="177dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:textSize="18sp"
                             android:visibility="visible"
@@ -85,12 +85,12 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <EditText
                             android:id="@+id/edit_text_search_book"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_weight="2"
                             android:ems="10"
                             android:hint="@string/book_title"
@@ -103,51 +103,57 @@
                             tools:layout_editor_absoluteY="8dp"
                             tools:targetApi="o" />
 
-                    </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/textViewOrderBy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:text="@string/order_by"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
 
-                        <TextView
-                            android:id="@+id/textViewOrderBy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="@string/order_by"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
+                                <RadioButton
+                                    android:id="@+id/radioButtonByPrice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_weight="1"
+                                    android:checked="true"
+                                    android:onClick="onRadioButtonCLick"
+                                    android:text="@string/price"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/textViewOrderBy" />
 
                             <RadioButton
-                            android:id="@+id/radioButtonByPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="1"
-                            android:checked="true"
-                            android:onClick="onRadioButtonCLick"
-                            android:text="@string/price"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textViewOrderBy" />
+                                android:id="@+id/radioButtonByRating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1"
+                                android:onClick="onRadioButtonCLick"
+                                android:text="@string/ratings"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/radioButtonByPrice"
+                                app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
+                        </LinearLayout>
 
-                        <RadioButton
-                            android:id="@+id/radioButtonByRating"
+                        <Switch
+                            android:id="@+id/hidePurchasedSwitch"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginBottom="5dp"
-                            android:layout_weight="1"
-                            android:onClick="onRadioButtonCLick"
-                            android:text="@string/ratings"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/radioButtonByPrice"
-                            app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
+                            android:text="Hide Purchased:" />
                     </LinearLayout>
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </FrameLayout>
