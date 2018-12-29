@@ -67,6 +67,7 @@
     <string name="price">Price</string>
     <string name="settings">Settings</string>
     <string name="download">Download</string>
+    <string name="hide_purchased">Hide Purchased:</string>
 
 
     <string-array name="order_options">
