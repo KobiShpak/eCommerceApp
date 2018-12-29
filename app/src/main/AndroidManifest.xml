@@ -58,7 +58,8 @@
         </activity>
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".ReviewActivity" />
-        <activity android:name=".BookDetailsActivity" />
+        <activity android:name=".BookDetailsActivity"
+                  android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
