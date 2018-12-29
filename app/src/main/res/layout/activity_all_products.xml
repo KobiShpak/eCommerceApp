@@ -123,7 +123,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/edit_text_search_book" />
 
-                        <RadioButton
+                            <RadioButton
                             android:id="@+id/radioButtonByPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -136,13 +136,13 @@
                             app:layout_constraintStart_toEndOf="@+id/textViewOrderBy" />
 
                         <RadioButton
-                            android:id="@+id/radioButtonByReviews"
+                            android:id="@+id/radioButtonByRating"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginBottom="5dp"
                             android:layout_weight="1"
                             android:onClick="onRadioButtonCLick"
-                            android:text="@string/reviews"
+                            android:text="@string/ratings"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/radioButtonByPrice"
@@ -153,7 +153,7 @@
         </FrameLayout>
      </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.RecyclerView
         android:id="@+id/books_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
