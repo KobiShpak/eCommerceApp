@@ -27,14 +27,13 @@
                 android:id="@+id/book_thumb_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:src="@color/colorAccent"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/todo"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/todo" />
+                card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/book_name"
