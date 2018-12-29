@@ -41,9 +41,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:background="@android:color/holo_orange_light"
+        android:background="@color/colorPrimary"
         android:onClick="onSubmitClick"
         android:text="@string/submit"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

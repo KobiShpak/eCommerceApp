@@ -107,7 +107,12 @@ public class AllProductsActivity extends AppCompatActivity {
             pleaseWait();
             DisplayUserInformation();
 
-            if (!m_FirebaseUser.getDisplayName().isEmpty()) {
+            if (m_FirebaseUser.getEmail() == "")
+            {
+                myUser = new User();
+                getAllBooks();
+            }
+            else {
                 myUserRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -127,10 +132,6 @@ public class AllProductsActivity extends AppCompatActivity {
                         Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
                     }
                 });
-            }
-            else {
-                myUser = new User();
-                getAllBooks();
             }
         }
 

@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/darkGray">
 
     <TextView
         android:id="@+id/splashScreenHeadline"
@@ -15,9 +16,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="@string/eCommerceApp"
-        android:textSize="30sp"
-        android:layout_gravity="center"/>
+        android:text="Bookface"
+        android:textSize="80sp"
+        android:layout_gravity="center"
+        android:textColor="#ffffff"/>
 
     <ImageView
         android:id="@+id/imageView"
@@ -31,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ecommerce_image" />
+        app:srcCompat="@drawable/splash_screen_pic" />
 
     <TextView
         android:id="@+id/textView"
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:lines="4"
         android:text="@string/group_name"
-        android:textSize="30sp"
-        tools:layout_marginTop="40dp" />
+        android:textSize="20sp"
+        tools:layout_marginTop="40dp"
+        android:textColor="#ffffff"/>
 </LinearLayout>
