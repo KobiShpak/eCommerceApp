@@ -51,9 +51,9 @@ public class AllProductsActivity extends AppCompatActivity {
     private TextView m_UserInfoTextView;
     private EditText m_SearchEditText;
     private TextView m_LogoutTextView;
+    private Spinner m_OrderBySpinner;
     private DatabaseReference allBooksRef;
     private DatabaseReference myUserRef;
-
     private List<BookWithKey> booksList = new ArrayList<>();
 
     private RecyclerView recyclerView;
@@ -65,8 +65,6 @@ public class AllProductsActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private DrawerLayout m_DrawerLayout;
     private NavigationView m_NavigationView;
-    private Spinner spinnerOrderBy;
-    private Spinner spinnerFilterBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,50 +140,13 @@ public class AllProductsActivity extends AppCompatActivity {
             }
         }
 
-        /*
-        spinnerOrderBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = parent.getSelectedItem().toString();
-                switch (selected) {
-                    case "Price: Low to High":
-                    //    Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "Price: High to Low":
-                    //    Toast.makeText(AllProductsActivity.this, "call 'sort by price'", Toast.LENGTH_SHORT).show();
-                        break;
-                    case "Rating: High to Low":
-                    //    Toast.makeText(AllProductsActivity.this, "call 'sort by rating", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });
-
-        spinnerFilterBy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selected = parent.getSelectedItem().toString();
-                if(selected == "Rating: Top rated only") {
-                    Toast.makeText(AllProductsActivity.this, "call 'filter by top rating", Toast.LENGTH_SHORT).show();
-                }
-                else if(selected != "All") {
-                    Toast.makeText(AllProductsActivity.this, "call 'filter by" + parent.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });
-        */
     }
 
     private void showFilteredBooks()
     {
         String searchString = ((EditText)findViewById(R.id.edit_text_search_book)).getText().toString();
-        String orderBy = ((RadioButton)findViewById(R.id.radioButtonByReviews)).isChecked() ? "rating" : "price";
+        String orderBy = ((RadioButton)findViewById(R.id.radioButtonByRating)).isChecked() ? "rating" : "price";
         Query searchBook;
 
         Log.e(TAG, "onSearchTextChange() >> searchString="+searchString+ ",orderBy="+orderBy);
@@ -270,9 +231,9 @@ public class AllProductsActivity extends AppCompatActivity {
     public void onRadioButtonCLick(View v) {
         switch (v.getId()) {
             case R.id.radioButtonByPrice:
-                ((RadioButton)findViewById(R.id.radioButtonByReviews)).setChecked(false);
+                ((RadioButton)findViewById(R.id.radioButtonByRating)).setChecked(false);
                 break;
-            case R.id.radioButtonByReviews:
+            case R.id.radioButtonByRating:
                 ((RadioButton)findViewById(R.id.radioButtonByPrice)).setChecked(false);
                 break;
         }
