@@ -51,6 +51,7 @@
     <string name="book_name">[BOOK NAME]</string>
     <string name="author">[author]</string>
     <string name="genere">[genere]</string>
+    <string name="description">[Description]</string>
     <string name="x_x">[$X.X]</string>
     <string name="todo">TODO</string>
     <string name="write_a_review">Write a review</string>
