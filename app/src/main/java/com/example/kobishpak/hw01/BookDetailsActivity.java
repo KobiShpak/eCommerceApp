@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -118,6 +119,7 @@ public class BookDetailsActivity extends AppCompatActivity {
                 if (bookWasPurchased) {
                     Log.e(TAG, "buy.onClick() >> Downloading purchased book");
                     //User purchased the book so he can download it
+                    haveStoragePermission();
                     downloadCurrentBook(book.getFile());
 
                 } else {
@@ -198,6 +200,25 @@ public class BookDetailsActivity extends AppCompatActivity {
         });
     }
 
+    public  boolean haveStoragePermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.e("Permission error","You have permission");
+                return true;
+            } else {
+
+                Log.e("Permission error","You have asked for permission");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //you dont need to worry about these stuff below api level 23
+            Log.e("Permission error","You already have the permission");
+            return true;
+        }
+    }
+
     void saveFile(Uri uri, String bookFile)
     {
         DownloadManager downloadmanager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
@@ -206,7 +227,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
                 DownloadManager.Request.NETWORK_MOBILE);
         request.allowScanningByMediaScanner();
-        request.setTitle("Book");
+        request.setTitle(bookFile);
         request.setDescription("Downloading");
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, bookFile);
@@ -224,5 +245,14 @@ public class BookDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),AllProductsActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            //you have the permission now.
+            downloadCurrentBook(book.getFile());
+        }
     }
 }
