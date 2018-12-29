@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".ReviewActivity" />
+        <activity android:name=".ReviewActivity" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity android:name=".BookDetailsActivity"
                   android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>

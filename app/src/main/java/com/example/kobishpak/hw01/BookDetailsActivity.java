@@ -2,7 +2,6 @@ package com.example.kobishpak.hw01;
 
 import android.Manifest;
 import android.app.DownloadManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 
 import android.content.Intent;
@@ -12,10 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -36,10 +33,8 @@ import com.example.kobishpak.hw01.adapter.ReviewsAdapter;
 import com.example.kobishpak.hw01.model.Book;
 import com.example.kobishpak.hw01.model.Review;
 import com.example.kobishpak.hw01.model.User;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,7 +43,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -81,7 +75,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         key = getIntent().getStringExtra("key");
         book = getIntent().getParcelableExtra("book");
         user = getIntent().getParcelableExtra("user");

@@ -281,7 +281,7 @@ public class AllProductsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_exit_to_app_black_24dp);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_exit_to_app_white_24dp);
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_UserImageView = findViewById(R.id.userImageView);
         m_SearchEditText = findViewById(R.id.edit_text_search_book);
