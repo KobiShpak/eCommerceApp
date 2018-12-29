@@ -101,7 +101,7 @@
                 android:id="@+id/button_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="120dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/holo_orange_light"

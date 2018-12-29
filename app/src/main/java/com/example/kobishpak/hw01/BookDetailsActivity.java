@@ -212,7 +212,11 @@ public class BookDetailsActivity extends AppCompatActivity {
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, bookFile);
         request.setMimeType("*/*");
 
-        downloadmanager.enqueue(request);
+        try {
+            downloadmanager.enqueue(request);
+        }catch(Exception e) {
+            Log.e(TAG, "DownloadCurrentBook() << Faild");
+        }
     }
 
     @Override
