@@ -90,13 +90,25 @@
                 android:id="@+id/buttonBuy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="6dp"
                 android:layout_marginBottom="16dp"
                 android:background="@android:color/holo_orange_light"
                 android:text="@string/buy_x"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.977"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/button_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="120dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/holo_orange_light"
+                android:text="@string/leave_review"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonBuy"
                 app:layout_constraintStart_toEndOf="@+id/textViewArtist" />
 
             <ImageView

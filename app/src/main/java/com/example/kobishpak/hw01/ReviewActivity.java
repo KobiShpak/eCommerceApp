@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kobishpak.hw01.model.Book;
 import com.example.kobishpak.hw01.model.Review;
@@ -52,7 +54,6 @@ public class ReviewActivity extends Activity {
 
         userReview = findViewById(R.id.new_user_review);
         userRating = findViewById(R.id.new_user_rating);
-
 
         bookRef = FirebaseDatabase.getInstance().getReference("Books/" + key);
 
@@ -154,5 +155,6 @@ public class ReviewActivity extends Activity {
 
         Log.e(TAG, "onSubmitClick() <<");
     }
+
 }
 

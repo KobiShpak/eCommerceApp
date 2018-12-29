@@ -19,10 +19,12 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AllProductsActivity extends AppCompatActivity {
@@ -51,7 +54,7 @@ public class AllProductsActivity extends AppCompatActivity {
     private TextView m_UserInfoTextView;
     private EditText m_SearchEditText;
     private TextView m_LogoutTextView;
-    private Spinner m_OrderBySpinner;
+    private Switch mHidePurchasedSwitch;
     private DatabaseReference allBooksRef;
     private DatabaseReference myUserRef;
     private List<BookWithKey> booksList = new ArrayList<>();
@@ -140,7 +143,13 @@ public class AllProductsActivity extends AppCompatActivity {
             }
         }
 
+        mHidePurchasedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                getAllBooks();
+            }
+        });
     }
 
     private void showFilteredBooks()
@@ -166,7 +175,11 @@ public class AllProductsActivity extends AppCompatActivity {
 
                 Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
 
-                updateBooksList(snapshot);
+                if (mHidePurchasedSwitch.isChecked()) {
+                    hidePurchesdBooks(snapshot);
+                } else {
+                    updateBooksList(snapshot);
+                }
 
                 Log.e(TAG, "onDataChange(Query) <<");
 
@@ -189,21 +202,23 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.setAdapter(booksAdapter);
 
         getAllBooksUsingValueListenrs();
-
     }
 
     private void getAllBooksUsingValueListenrs() {
 
         allBooksRef = FirebaseDatabase.getInstance().getReference("Books");
         Query searchBook = allBooksRef.orderByChild("price");
-
         searchBook.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 Log.e(TAG, "onDataChange(Books) >> " + snapshot.getKey());
 
-                updateBooksList(snapshot);
+                if (mHidePurchasedSwitch.isChecked()) {
+                    hidePurchesdBooks(snapshot);
+                } else {
+                    updateBooksList(snapshot);
+                }
 
                 Log.e(TAG, "onDataChange(Books) <<");
             }
@@ -222,11 +237,30 @@ public class AllProductsActivity extends AppCompatActivity {
             Book book = dataSnapshot.getValue(Book.class);
             Log.e(TAG, "updateBookList() >> adding book: " + book.getName());
             String key = dataSnapshot.getKey();
+
             booksList.add(new BookWithKey(key, book));
         }
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
+    private void hidePurchesdBooks(DataSnapshot snapshot) {
+
+        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+            Book book = dataSnapshot.getValue(Book.class);
+            Log.e(TAG, "updateBookList() >> adding book: " + book.getName());
+            String key = dataSnapshot.getKey();
+
+            List<String> listOfUserBooks = myUser.getMyBooks();
+
+            for (String list:listOfUserBooks) {
+
+                if (list.equals(key)) {
+                    booksList.add(new BookWithKey(key, book));
+                }
+            }
+        }
+        recyclerView.getAdapter().notifyDataSetChanged();
+    }
 
     public void onRadioButtonCLick(View v) {
         switch (v.getId()) {
@@ -270,6 +304,7 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mHidePurchasedSwitch = findViewById(R.id.hidePurchasedSwitch);
     }
 
     @Override

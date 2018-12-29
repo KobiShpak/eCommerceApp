@@ -97,10 +97,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
         Iterator i = user.getMyBooks().iterator();
         while (i.hasNext()) {
-            if (i.next().equals(bookKey)) {
+            if (i.equals(bookKey)) {
                 holder.getPrice().setTextColor(ContextCompat.getColor(holder.getContext(),R.color.colorPrimary));
                 break;
             }
+            i.next();
         }
 
         Log.e(TAG,"onBindViewHolder() << "+ position);

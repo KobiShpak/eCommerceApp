@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
@@ -31,6 +32,7 @@ import com.example.kobishpak.hw01.model.User;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +54,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     private User user;
 
     private Button buy;
+    private Button mReviewButton;
     private RecyclerView recyclerViewBookReviews;
 
     private DatabaseReference bookReviewsRef;
@@ -165,6 +168,18 @@ public class BookDetailsActivity extends AppCompatActivity {
         });
         Log.e(TAG, "onCreate() <<");
 
+        mReviewButton = findViewById(R.id.button_review);
+
+        mReviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookDetailsActivity.this, ReviewActivity.class);
+                intent.putExtra("book", book);
+                intent.putExtra("key", key);
+                intent.putExtra("user",user);
+                startActivity(intent);
+            }
+        });
     }
 
     private void downloadCurrentBook(String bookFile) {
@@ -198,5 +213,12 @@ public class BookDetailsActivity extends AppCompatActivity {
         request.setMimeType("*/*");
 
         downloadmanager.enqueue(request);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),AllProductsActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -12,7 +12,7 @@ public class Book implements Parcelable {
     private String artist;
     private String genre;
     private String file;
-    private String thumbimage;
+    private String thumbImage;
     private int price;
     private int rating;
     private int reviewsCount;
@@ -23,7 +23,7 @@ public class Book implements Parcelable {
         this.artist = artist;
         this.genre = genre;
         this.file = file;
-        this.thumbimage = thumbImage;
+        this.thumbImage = thumbImage;
         this.price = price;
         this.rating = rating;
         this.reviewsCount = reviewsCount;
@@ -66,11 +66,11 @@ public class Book implements Parcelable {
     }
 
     public String getThumbImage() {
-        return thumbimage;
+        return thumbImage;
     }
 
     public void setThumbImage(String thumbImage) {
-        this.thumbimage = thumbImage;
+        this.thumbImage = thumbImage;
     }
 
     public int getPrice() {
@@ -110,7 +110,7 @@ public class Book implements Parcelable {
         parcel.writeString(artist);
         parcel.writeString(genre);
         parcel.writeString(file);
-        parcel.writeString(thumbimage);
+        parcel.writeString(thumbImage);
         parcel.writeInt(price);
         parcel.writeInt(rating);
         parcel.writeInt(reviewsCount);
@@ -121,7 +121,7 @@ public class Book implements Parcelable {
         this.artist = in.readString();
         this.genre = in.readString();
         this.file = in.readString();
-        this.thumbimage = in.readString();
+        this.thumbImage = in.readString();
         this.price = in.readInt();
         this.rating = in.readInt();
         this.reviewsCount = in.readInt();
