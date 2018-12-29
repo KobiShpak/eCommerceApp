@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,7 +20,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +40,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class AllProductsActivity extends AppCompatActivity {
@@ -53,7 +48,6 @@ public class AllProductsActivity extends AppCompatActivity {
     private ImageView m_UserImageView;
     private TextView m_UserInfoTextView;
     private EditText m_SearchEditText;
-    private TextView m_LogoutTextView;
     private Switch mHidePurchasedSwitch;
     private DatabaseReference allBooksRef;
     private DatabaseReference myUserRef;
@@ -66,8 +60,6 @@ public class AllProductsActivity extends AppCompatActivity {
     private FirebaseUser m_FirebaseUser;
     private boolean doubleBackToExitPressedOnce = false;
     private ProgressDialog progressDialog;
-    private DrawerLayout m_DrawerLayout;
-    private NavigationView m_NavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +69,6 @@ public class AllProductsActivity extends AppCompatActivity {
 
         initializeInstances();
 
-        m_NavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                // set item as selected to persist highlight
-                menuItem.setChecked(true);
-                // close drawer when item is tapped
-                m_DrawerLayout.closeDrawers();
-
-                return true;
-            }
-        });
         m_SearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -297,9 +278,6 @@ public class AllProductsActivity extends AppCompatActivity {
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_UserImageView = findViewById(R.id.userImageView);
         m_SearchEditText = findViewById(R.id.edit_text_search_book);
-        m_DrawerLayout = findViewById(R.id.drawer_layout);
-        m_NavigationView = findViewById(R.id.navigation_view);
-        m_LogoutTextView = findViewById(R.id.logout);
         recyclerView = findViewById(R.id.books_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
