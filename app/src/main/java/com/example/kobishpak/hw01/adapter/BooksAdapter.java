@@ -36,7 +36,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
 
     private User user;
 
-
     public BooksAdapter(List<BookWithKey> booksList, User user) {
 
         this.booksList = booksList;
