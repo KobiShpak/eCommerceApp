@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.kobishpak.hw01.adapter.ReviewsAdapter;
@@ -104,8 +105,14 @@ public class BookDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewArtist)).setText(book.getArtist());
         ((TextView) findViewById(R.id.textViewGenre)).setText(book.getGenre());
         buy = findViewById(R.id.buttonBuy);
-
-        buy.setText("BUY $" + book.getPrice());
+        if (user.isAnonymous())
+        {
+            Toast.makeText(BookDetailsActivity.this, "In order to purchase a Book, you must log in first.",Toast.LENGTH_LONG).show();
+            buy.setText("Login");
+        }
+        else {
+            buy.setText("BUY $" + book.getPrice());
+        }
         Iterator i = user.getMyBooks().iterator();
         while (i.hasNext()) {
             if (i.next().equals(key)) {
@@ -121,23 +128,28 @@ public class BookDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Log.e(TAG, "buy.onClick() >> file=" + book.getName());
+                if (!user.isAnonymous()) {
+                    if (bookWasPurchased) {
+                        Log.e(TAG, "buy.onClick() >> Downloading purchased book");
+                        //User purchased the book so he can download it
+                        downloadCurrentBook(book.getFile());
 
-                if (bookWasPurchased) {
-                    Log.e(TAG, "buy.onClick() >> Downloading purchased book");
-                    //User purchased the book so he can download it
-                    downloadCurrentBook(book.getFile());
-
-                } else {
-                    //Purchase the book.
-                    Log.e(TAG, "buy.onClick() >> Purchase the book");
-                    user.getMyBooks().add(key);
-                    user.upgdateTotalPurchase(book.getPrice());
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
-                    bookWasPurchased = true;
-                    buy.setText(R.string.download);
+                    } else {
+                        //Purchase the book.
+                        Log.e(TAG, "buy.onClick() >> Purchase the book");
+                        user.getMyBooks().add(key);
+                        user.upgdateTotalPurchase(book.getPrice());
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+                        bookWasPurchased = true;
+                        buy.setText(R.string.download);
+                    }
+                    Log.e(TAG, "DownloadBook.onClick() <<");
                 }
-                Log.e(TAG, "DownloadBook.onClick() <<");
+                else
+                {
+                    startActivity(new Intent(BookDetailsActivity.this,LoginActivity.class));
+                }
             }
         });
 
