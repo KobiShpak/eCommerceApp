@@ -106,7 +106,13 @@ public class AllProductsActivity extends AppCompatActivity {
             myUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_FirebaseUser.getUid());
             pleaseWait();
             DisplayUserInformation();
-            if (m_FirebaseUser.getDisplayName() != null) {
+
+            if (m_FirebaseUser.getEmail() == null || m_FirebaseUser.getEmail() == "")
+            {
+                myUser = new User();
+                getAllBooks();
+            }
+            else {
                 myUserRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -126,10 +132,6 @@ public class AllProductsActivity extends AppCompatActivity {
                         Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
                     }
                 });
-            }
-            else {
-                myUser = new User();
-                getAllBooks();
             }
         }
 
@@ -201,7 +203,7 @@ public class AllProductsActivity extends AppCompatActivity {
                 Log.e(TAG, "onDataChange(Books) >> " + snapshot.getKey());
 
                 if (mHidePurchasedSwitch.isChecked()) {
-                    hidePurchesdBooks(snapshot);
+                    showPurchesdBooks(snapshot);
                 } else {
                     updateBooksList(snapshot);
                 }
@@ -229,7 +231,7 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.getAdapter().notifyDataSetChanged();
     }
 
-    private void hidePurchesdBooks(DataSnapshot snapshot) {
+    private void showPurchesdBooks(DataSnapshot snapshot) {
 
         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
             Book book = dataSnapshot.getValue(Book.class);
@@ -279,7 +281,7 @@ public class AllProductsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_exit_to_app_black_24dp);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_exit_to_app_white_24dp);
         m_UserInfoTextView = findViewById(R.id.textViewUserInfo);
         m_UserImageView = findViewById(R.id.userImageView);
         m_SearchEditText = findViewById(R.id.edit_text_search_book);
@@ -324,20 +326,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
     }
 }

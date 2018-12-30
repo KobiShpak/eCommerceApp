@@ -2,7 +2,6 @@ package com.example.kobishpak.hw01;
 
 import android.Manifest;
 import android.app.DownloadManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 
 import android.content.Intent;
@@ -12,10 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -36,10 +33,8 @@ import com.example.kobishpak.hw01.adapter.ReviewsAdapter;
 import com.example.kobishpak.hw01.model.Book;
 import com.example.kobishpak.hw01.model.Review;
 import com.example.kobishpak.hw01.model.User;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,7 +43,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -81,7 +75,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         key = getIntent().getStringExtra("key");
         book = getIntent().getParcelableExtra("book");
         user = getIntent().getParcelableExtra("user");
@@ -108,8 +102,14 @@ public class BookDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewArtist)).setText(book.getArtist());
         ((TextView) findViewById(R.id.textViewGenre)).setText(book.getGenre());
         buy = findViewById(R.id.buttonBuy);
-
-        buy.setText("BUY $" + book.getPrice());
+        if (user.getEmail().isEmpty())
+        {
+            Toast.makeText(BookDetailsActivity.this, "In order to purchase a Book, you must log in first.",Toast.LENGTH_LONG).show();
+            buy.setText("Login");
+        }
+        else {
+            buy.setText("BUY $" + book.getPrice());
+        }
         Iterator i = user.getMyBooks().iterator();
         while (i.hasNext()) {
             if (i.next().equals(key)) {
@@ -126,27 +126,32 @@ public class BookDetailsActivity extends AppCompatActivity {
 
                 Log.e(TAG, "buy.onClick() >> file=" + book.getName());
 
-                if (bookWasPurchased) {
-                    Log.e(TAG, "buy.onClick() >> Downloading purchased book");
-                    //User purchased the book so he can download it
-                    haveStoragePermission();
-                    Toast.makeText(BookDetailsActivity.this,"Downloading Please wait..",Toast.LENGTH_LONG).show();
+                if (!user.getEmail().isEmpty()) { ///////////////////
+                    if (bookWasPurchased) {
+                        Log.e(TAG, "buy.onClick() >> Downloading purchased book");
+                        //User purchased the book so he can download it
+                        haveStoragePermission();
+                        Toast.makeText(BookDetailsActivity.this,"Downloading Please wait..",Toast.LENGTH_LONG).show();
 
-                    downloadCurrentBook(book.getFile());
+                        downloadCurrentBook(book.getFile());
 
-                } else {
-                    //Purchase the book.
-                    Log.e(TAG, "buy.onClick() >> Purchase the book");
-                    user.getMyBooks().add(key);
-                    user.upgdateTotalPurchase(book.getPrice());
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
-                    bookWasPurchased = true;
-                    buy.setText(R.string.download);
+                    } else {
+                        //Purchase the book.
+                        Log.e(TAG, "buy.onClick() >> Purchase the book");
+                        user.getMyBooks().add(key);
+                        user.upgdateTotalPurchase(book.getPrice());
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+                        bookWasPurchased = true;
+                        buy.setText(R.string.download);
+                    }
+                    Log.e(TAG, "DownloadBook.onClick() <<");
                 }
-                Log.e(TAG, "DownloadBook.onClick() <<");
-            }
-        });
+                else
+                {
+                    startActivity(new Intent(BookDetailsActivity.this,LoginActivity.class));
+                }}
+            });
 
         recyclerViewBookReviews = findViewById(R.id.book_reviews);
         recyclerViewBookReviews.setHasFixedSize(true);

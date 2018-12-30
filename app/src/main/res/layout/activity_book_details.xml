@@ -9,9 +9,10 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        app:titleTextColor="@color/white"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
     <FrameLayout
@@ -82,8 +83,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_marginBottom="16dp"
-                android:background="@android:color/holo_orange_light"
+                android:background="@color/colorPrimary"
                 android:text="@string/buy_x"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -94,9 +96,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
-                android:background="@android:color/holo_orange_light"
-                android:text="@string/leave_review"
+                android:background="@color/colorPrimary"
+                android:text="@string/add_review"
                 android:visibility="visible"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonBuy"
                 app:layout_constraintStart_toEndOf="@+id/textViewArtist" />
