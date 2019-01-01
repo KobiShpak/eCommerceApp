@@ -23,16 +23,15 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-            //    if (m_FirebaseUser != null) {
-            //        Intent splashScreenIntent = new Intent(MainActivity.this, AllProductsActivity.class);
-            //        startActivity(splashScreenIntent);
-            //        finish();
-            //    } else {
-                    Intent splashScreenIntent = new Intent(MainActivity.this, LoginActivity.class);
-            //        Intent splashScreenIntent = new Intent(MainActivity.this, AllProductsActivity.class);
+                if (m_FirebaseUser != null) {
+                    Intent splashScreenIntent = new Intent(MainActivity.this, AllProductsActivity.class);
                     startActivity(splashScreenIntent);
                     finish();
-            //    }
+                } else {
+                    Intent splashScreenIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(splashScreenIntent);
+                    finish();
+                }
             }
         }, SPLASH_SCREEN_TIME_OUT);
     }
