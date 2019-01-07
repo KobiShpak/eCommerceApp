@@ -31,13 +31,17 @@ import java.util.List;
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHolder> {
 
     private final String TAG = "BooksAdapter";
-
     private List<BookWithKey> booksList;
-
     private User user;
+    private int m_Discount = 0;
+
+    public BooksAdapter(List<BookWithKey> booksList, User user, int i_Discount) {
+        this.m_Discount = i_Discount;
+        this.booksList = booksList;
+        this.user = user;
+    }
 
     public BooksAdapter(List<BookWithKey> booksList, User user) {
-
         this.booksList = booksList;
         this.user = user;
     }
@@ -93,7 +97,8 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
         }
         //Check if the user already purchased the book if set the text to Play
         //If not to BUY $X
-        holder.getPrice().setText("$"+book.getPrice());
+        int price = book.getPrice() - m_Discount;
+        holder.getPrice().setText("$"+price);
 
         Iterator i = user.getMyBooks().iterator();
         while (i.hasNext()) {

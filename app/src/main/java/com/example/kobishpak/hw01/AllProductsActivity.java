@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -38,8 +39,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AllProductsActivity extends AppCompatActivity {
@@ -52,7 +57,7 @@ public class AllProductsActivity extends AppCompatActivity {
     private DatabaseReference allBooksRef;
     private DatabaseReference myUserRef;
     private List<BookWithKey> booksList = new ArrayList<>();
-
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
     private RecyclerView recyclerView;
     private BooksAdapter booksAdapter;
     private User myUser;
@@ -60,6 +65,7 @@ public class AllProductsActivity extends AppCompatActivity {
     private FirebaseUser m_FirebaseUser;
     private boolean doubleBackToExitPressedOnce = false;
     private ProgressDialog progressDialog;
+    private static int m_Discount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +88,15 @@ public class AllProductsActivity extends AppCompatActivity {
                 mHidePurchasedSwitch.setEnabled(false);
 
                 showFilteredBooks();
+                if (!s.toString().isEmpty()) {
+                    m_AnalyticsManager.trackSearchEvent(s.toString());
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
+                if (s.length() == 0)
+                {
                     findViewById(R.id.radioButtonByRating).setEnabled(true);
                     findViewById(R.id.radioButtonByPrice).setEnabled(true);
                     mHidePurchasedSwitch.setEnabled(true);
@@ -113,6 +123,7 @@ public class AllProductsActivity extends AppCompatActivity {
                 getAllBooks();
             }
             else {
+                FirebaseMessaging.getInstance().subscribeToTopic("all");
                 myUserRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -186,7 +197,7 @@ public class AllProductsActivity extends AppCompatActivity {
 
     private void getAllBooks() {
         booksList.clear();
-        booksAdapter = new BooksAdapter(booksList,myUser);
+        booksAdapter = new BooksAdapter(booksList, myUser, m_Discount);
         recyclerView.setAdapter(booksAdapter);
 
         getAllBooksUsingValueListenrs();
@@ -290,6 +301,8 @@ public class AllProductsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         mHidePurchasedSwitch = findViewById(R.id.hidePurchasedSwitch);
+        m_AnalyticsManager.init(this);
+        m_Discount = (new SimpleDateFormat("E")).format(new Date()).equals("Mon") ? 1 : 0; // Bookworm Monday
     }
 
     @Override
