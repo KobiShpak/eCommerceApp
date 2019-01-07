@@ -149,6 +149,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         m_SubmitButton = findViewById(R.id.buttonSubmit);
         m_UserImageView = findViewById(R.id.userImageView);
         progressDialog = new ProgressDialog(this);
+        m_AnalyticsManager.init(this);
     }
 
     private void OnClickSubmitButton(){
@@ -308,8 +309,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                             }
 
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                            userRef.child(user.getUid()).setValue(new User(user.getEmail(),
-                                    0,null));
+                            userRef.child(user.getUid()).setValue(new User(user.getEmail(),0,
+                                    0,null,"inAppRegister"));
 
                             Toast.makeText(EnterUserInfoActivity.this, "Successfully registered", Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();

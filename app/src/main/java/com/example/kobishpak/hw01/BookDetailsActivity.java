@@ -145,7 +145,7 @@ public class BookDetailsActivity extends AppCompatActivity {
                         //Purchase the book.
                         Log.e(TAG, "buy.onClick() >> Purchase the book");
                         user.getMyBooks().add(key);
-                        user.upgdateTotalPurchase(book.getPrice());
+                        user.updatePurchaseStatus(book.getPrice());
                         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
                         userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
                         bookWasPurchased = true;
@@ -167,6 +167,8 @@ public class BookDetailsActivity extends AppCompatActivity {
                         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         notificationManager.notify(0,notificationBuilder.build());
                         m_AnalyticsManager.trackPurchase(book);
+                        m_AnalyticsManager.setUserProperty("total_purchase",Integer.toString(user.getTotalPurchase()));
+                        m_AnalyticsManager.setUserProperty("my_books_count",Integer.toString(user.getMyBooksCount()));
                     }
                     Log.e(TAG, "DownloadBook.onClick() <<");
                 }
