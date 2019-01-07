@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient m_GoogleSignInClient;
     private TextView m_ForgotPasswordText;
     private TextView m_SignInAnonymouslyText;
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
         m_GoogleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //checkIfUserExists();
                 signInWithGoogle();
             }
         });
@@ -192,7 +194,6 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_LONG).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -236,7 +237,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                             checkIfUserExists();
                             LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(m_FacebookPermissions));
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
@@ -273,7 +273,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void createNewUserFacebookAndGoogle() {
-
         Log.e(TAG, "createNewUser() >>");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -285,6 +284,15 @@ public class LoginActivity extends AppCompatActivity {
         }
         userRef.child(user.getUid()).setValue(new User(user.getEmail(),
                 0,null));
+
+        if (m_FacebookPermissions != null)
+        {
+            m_AnalyticsManager.trackSignupEvent("facebookRegistration");
+        }
+        else if (m_GoogleSignInClient != null)
+        {
+            m_AnalyticsManager.trackSignupEvent("googleRegistration");
+        }
 
         Log.e(TAG, "createNewUser() <<");
     }

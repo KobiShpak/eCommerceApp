@@ -1,0 +1,153 @@
+package com.example.kobishpak.hw01;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+
+//import com.appsee.Appsee;
+import com.example.kobishpak.hw01.model.Book;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class AnalyticsManager {
+    private static String TAG = "AnalyticsManager";
+    private static AnalyticsManager mInstance = null;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    private AnalyticsManager() {}
+
+    public static AnalyticsManager getInstance() {
+        if (mInstance == null) {
+            mInstance = new AnalyticsManager();
+        }
+        return (mInstance);
+    }
+
+    public void init(Context context) {
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        //Appsee.start();
+    }
+
+    public void trackSearchEvent(String searchString) {
+        String eventName = "search";
+
+        //Firebase
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.SEARCH_TERM, searchString);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH,params);
+
+        //AppSee
+        //Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        //eventParams2.put("search term", searchString);
+        //Appsee.addEvent(eventName,e ventParams2);
+    }
+
+    public void trackSignupEvent(String signupMethod) {
+        String eventName = "signup";
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD, signupMethod);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP,params);
+
+        //AppSee
+        //Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        //eventParams2.put("signup method", signupMethod);
+        //Appsee.addEvent(eventName,eventParams2);
+    }
+
+
+    public void trackLoginEvent(String loginMethod) {
+
+        String eventName = "login";
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD, loginMethod);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN,params);
+        //AppSee
+        //Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        //eventParams2.put("signup method", loginMethod);
+        //
+        //Appsee.addEvent(eventName,eventParams2);
+    }
+
+    public void trackBookEvent(String event , Book book) {
+        Bundle params = new Bundle();
+
+        params.putString("book_genre", book.getGenre());
+        params.putString("book_name", book.getName());
+        params.putString("book_name", book.getArtist());
+        params.putDouble("book_price",book.getPrice());
+        params.putDouble("book_rating",book.getRating());
+
+        mFirebaseAnalytics.logEvent(event,params);
+
+        //AppSee
+        //Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        //eventParams2.put("book_genre", book.getGenre());
+        //eventParams2.put("book_name", book.getName());
+        //eventParams2.put("book_name", book.getArtist());
+        //eventParams2.put("book_price",String.valueOf(book.getPrice()));
+        //eventParams2.put("book_rating",String.valueOf(book.getRating()));
+        //
+        //Appsee.addEvent(event,eventParams2);
+    }
+
+    public void trackPurchase(Book book) {
+        String eventName = "purchase";
+        Bundle params = new Bundle();
+        params.putDouble(FirebaseAnalytics.Param.PRICE,book.getPrice());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ECOMMERCE_PURCHASE,params);
+
+        //AppSee
+        //Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        //eventParams2.put("book_genre", book.getGenre());
+        //eventParams2.put("book_name", book.getName());
+        //eventParams2.put("book_name", book.getArtist());
+        //eventParams2.put("book_price",String.valueOf(book.getPrice()));
+        //eventParams2.put("book_rating",String.valueOf(book.getRating()));
+        //
+        //Appsee.addEvent(eventName,eventParams2);
+    }
+
+    public void trackBookRating(Book book ,int userRating) {
+
+        String eventName = "book_rating";
+        Bundle params = new Bundle();
+
+        params.putString("book_genre", book.getGenre());
+        params.putString("book_name", book.getName());
+        params.putString("book_artist", book.getArtist());
+        params.putDouble("book_price",book.getPrice());
+        params.putDouble("book_reviews_count",book.getReviewsCount());
+        params.putDouble("book_total_rating",book.getRating());
+        params.putDouble("book_user_rating",userRating);
+
+        mFirebaseAnalytics.logEvent(eventName,params);
+
+        //AppSee
+        //Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        //eventParams2.put("book_genre", book.getGenre());
+        //eventParams2.put("book_name", book.getName());
+        //eventParams2.put("book_name", book.getArtist());
+        //eventParams2.put("book_price",String.valueOf(book.getPrice()));
+        //eventParams2.put("book_reviews_count",String.valueOf(book.getReviewsCount()));
+        //eventParams2.put("book_total_rating",String.valueOf(book.getRating()));
+        //eventParams2.put("book_user_rating",String.valueOf(userRating));
+//
+        //Appsee.addEvent(eventName,eventParams2);
+    }
+
+    public void setUserID(String id, boolean newUser) {
+        mFirebaseAnalytics.setUserId(id);
+
+        //Appsee.setUserId(id);
+    }
+
+    public void setUserProperty(String name , String value) {
+        mFirebaseAnalytics.setUserProperty(name,value);
+    }
+
+}

@@ -53,7 +53,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
     private boolean m_IsImageValid = false;
     private FirebaseAuth m_FirebaseAuth;
     private static final String TAG = "FACEREGISTER";
-
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isImageUploaded = false;
 
@@ -209,6 +209,7 @@ public class EnterUserInfoActivity extends AppCompatActivity {
         }
         else {
             createAccount(email, password);
+            m_AnalyticsManager.trackSignupEvent("inAppRegister");
         }
     }
 

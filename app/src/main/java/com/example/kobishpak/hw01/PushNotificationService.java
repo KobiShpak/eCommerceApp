@@ -27,7 +27,6 @@ public class PushNotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         Log.e(TAG, "onMessageReceived() >>");
         String title = "title";
         String body = "body";
@@ -36,10 +35,8 @@ public class PushNotificationService extends FirebaseMessagingService {
         Map<String,String> data;
         RemoteMessage.Notification notification;
 
-
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.e(TAG, "From: " + remoteMessage.getFrom());
-
 
         if (remoteMessage.getNotification() == null) {
             Log.e(TAG, "onMessageReceived() >> Notification is empty");
@@ -100,6 +97,7 @@ public class PushNotificationService extends FirebaseMessagingService {
                         .setContentIntent(pendingIntent)
                         .setSmallIcon(icon)
                         .setSound(soundRri)
+                        .setColor(getResources().getColor(R.color.colorPrimary))
                         .setChannelId(channelId);
 
 
