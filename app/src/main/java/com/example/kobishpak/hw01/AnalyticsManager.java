@@ -53,7 +53,7 @@ public class AnalyticsManager {
     public void trackSignupEvent(String signupMethod) {
         String eventName = "signup";
         Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD, signupMethod);
+        params.putString("signupMethod", signupMethod);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP,params);
 
         //Mixpanel
@@ -67,7 +67,7 @@ public class AnalyticsManager {
 
         String eventName = "login";
         Bundle params = new Bundle();
-        params.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD, loginMethod);
+        params.putString("login_method", loginMethod);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN,params);
 
         //Mixpanel
@@ -142,12 +142,9 @@ public class AnalyticsManager {
         mMixpanel.trackMap(eventName,eventParams2);
     }
 
-    public void setUserID(String id, boolean newUser) {
+    public void setUserID(String id) {
         mFirebaseAnalytics.setUserId(id);
 
-        if (newUser) {
-            mMixpanel.alias(id, null);
-        }
         mMixpanel.identify(id);
         mMixpanel.getPeople().identify(mMixpanel.getDistinctId());
     }

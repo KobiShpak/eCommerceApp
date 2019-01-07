@@ -11,24 +11,24 @@ public class User implements Parcelable {
 
     private String email;
     private int totalPurchase;
+    private int booksCount;
     private List<String> myBooks = new ArrayList<>();
+    private String signupMethod;
 
     public User() {
         this.email = "";
     }
 
-    public User(String email, int totalPurchase, List<String> myBooks) {
+    public User(String email, int booksCount, int totalPurchase, List<String> myBooks, String signupMethod) {
         this.email = email;
         this.totalPurchase = totalPurchase;
+        this.booksCount = booksCount;
         this.myBooks = myBooks;
+        this.signupMethod = signupMethod;
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public void upgdateTotalPurchase(int newPurcahsePrice) {
-        this.totalPurchase += newPurcahsePrice;
     }
 
     public List<String> getMyBooks() {
@@ -63,4 +63,18 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public void updatePurchaseStatus(int purchaseFee)
+    {
+        this.booksCount++;
+        this.totalPurchase += purchaseFee;
+    }
+
+    public int getTotalPurchase() {
+        return this.totalPurchase;
+    }
+
+    public int getMyBooksCount() {
+        return this.booksCount;
+    }
 }

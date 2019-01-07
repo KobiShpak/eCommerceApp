@@ -126,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
         m_GoogleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //checkIfUserExists();
                 signInWithGoogle();
             }
         });
@@ -180,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
         m_CreateAccount = findViewById(R.id.createAccountTextView);
         m_ForgotPasswordText = findViewById(R.id.forgotPasswordTextView);
         m_SignInAnonymouslyText = findViewById(R.id.signInAnonymouslyTextView);
-
+        m_AnalyticsManager.init(this);
         m_GoogleLoginButton.setSize(SignInButton.SIZE_STANDARD);
     }
 
@@ -194,6 +193,9 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_LONG).show();
+                            m_AnalyticsManager.setUserID(mAuth.getCurrentUser().getUid());
+                            m_AnalyticsManager.setUserProperty("email",mAuth.getCurrentUser().getEmail());
+                            m_AnalyticsManager.trackLoginEvent("email_login");
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -237,8 +239,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            checkIfUserExists();
+                            checkIfUserExists("facebookRegistration");
                             LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList(m_FacebookPermissions));
+                            m_AnalyticsManager.trackLoginEvent("facebook_login");
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -262,7 +265,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            checkIfUserExists();
+                            checkIfUserExists("googleRegistration");
+                            m_AnalyticsManager.trackLoginEvent("google_login");
                             startActivity(new Intent(LoginActivity.this, AllProductsActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
@@ -272,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void createNewUserFacebookAndGoogle() {
+    private void createNewUserFacebookAndGoogle(String signupMethod) {
         Log.e(TAG, "createNewUser() >>");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -282,22 +286,15 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(TAG, "createNewUser() << Error user is null");
             return;
         }
-        userRef.child(user.getUid()).setValue(new User(user.getEmail(),
-                0,null));
+        userRef.child(user.getUid()).setValue(new User(user.getEmail(),0,
+                0,null,signupMethod));
 
-        if (m_FacebookPermissions != null)
-        {
-            m_AnalyticsManager.trackSignupEvent("facebookRegistration");
-        }
-        else if (m_GoogleSignInClient != null)
-        {
-            m_AnalyticsManager.trackSignupEvent("googleRegistration");
-        }
+        m_AnalyticsManager.trackSignupEvent(signupMethod);
 
         Log.e(TAG, "createNewUser() <<");
     }
 
-    private void checkIfUserExists()
+    private void checkIfUserExists(final String signupMethod)
     {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
@@ -308,7 +305,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()) {
                     Log.e(TAG, "**** uidRef Not exists <<----" );
-                    createNewUserFacebookAndGoogle();
+                    createNewUserFacebookAndGoogle(signupMethod);
                 }
             }
 
