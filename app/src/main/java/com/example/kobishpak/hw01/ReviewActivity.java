@@ -41,6 +41,7 @@ public class ReviewActivity extends Activity {
     private TextView userReview;
     private RatingBar userRating;
     private DatabaseReference bookRef;
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class ReviewActivity extends Activity {
 
         userReview = findViewById(R.id.new_user_review);
         userRating = findViewById(R.id.new_user_rating);
+        m_AnalyticsManager.init(this);
 
         bookRef = FirebaseDatabase.getInstance().getReference("Books/" + key);
 
@@ -139,6 +141,7 @@ public class ReviewActivity extends Activity {
                             user.getEmail());
 
                     bookRef.child("/reviews/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(review);
+                    m_AnalyticsManager.trackBookRating(book, (int)userRating.getRating());
                 }
 
 

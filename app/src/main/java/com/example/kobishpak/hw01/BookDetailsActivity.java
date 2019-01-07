@@ -64,6 +64,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     private DatabaseReference bookReviewsRef;
     private StorageReference mBookStorage;
     private List<Review> reviewsList = new ArrayList<>();
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     private boolean bookWasPurchased;
 
@@ -83,6 +84,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         book = getIntent().getParcelableExtra("book");
         user = getIntent().getParcelableExtra("user");
         mBookStorage = FirebaseStorage.getInstance().getReference().child(("Books/"));
+        m_AnalyticsManager.init(this);
 
         StorageReference thumbRef = FirebaseStorage
                 .getInstance()
@@ -137,6 +139,7 @@ public class BookDetailsActivity extends AppCompatActivity {
                         Toast.makeText(BookDetailsActivity.this,"Downloading Please wait..",Toast.LENGTH_LONG).show();
 
                         downloadCurrentBook(book.getFile());
+                        logBookEvent("book_downloaded");
 
                     } else {
                         //Purchase the book.
@@ -163,6 +166,7 @@ public class BookDetailsActivity extends AppCompatActivity {
 
                         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         notificationManager.notify(0,notificationBuilder.build());
+                        m_AnalyticsManager.trackPurchase(book);
                     }
                     Log.e(TAG, "DownloadBook.onClick() <<");
                 }
@@ -218,6 +222,10 @@ public class BookDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void logBookEvent(String event){
+        m_AnalyticsManager.trackBookEvent(event, book);
     }
 
     @Override

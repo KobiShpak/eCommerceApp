@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -74,16 +75,6 @@ public class AllProductsActivity extends AppCompatActivity {
 
         initializeInstances();
 
-        m_SearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                String searchText = ((EditText)findViewById(R.id.edit_text_search_book)).getText().toString();
-                if (!searchText.isEmpty()) {
-                    m_AnalyticsManager.trackSearchEvent(searchText);
-                }
-            }
-        });
-
         m_SearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,11 +88,15 @@ public class AllProductsActivity extends AppCompatActivity {
                 mHidePurchasedSwitch.setEnabled(false);
 
                 showFilteredBooks();
+                if (!s.toString().isEmpty()) {
+                    m_AnalyticsManager.trackSearchEvent(s.toString());
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
+                if (s.length() == 0)
+                {
                     findViewById(R.id.radioButtonByRating).setEnabled(true);
                     findViewById(R.id.radioButtonByPrice).setEnabled(true);
                     mHidePurchasedSwitch.setEnabled(true);
