@@ -2,6 +2,8 @@ package com.example.kobishpak.hw01;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -144,6 +147,22 @@ public class BookDetailsActivity extends AppCompatActivity {
                         userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
                         bookWasPurchased = true;
                         buy.setText(R.string.download);
+                        String title = "Congratulations on your new book purchase!",
+                                body = "Check out other books that you might enjoy!",
+                                channelId = "fcm_default_channel";
+                        Intent intent = new Intent(BookDetailsActivity.this, AllProductsActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(BookDetailsActivity.this, 0, intent,0);
+                        NotificationCompat.Builder notificationBuilder =
+                                new NotificationCompat.Builder(BookDetailsActivity.this, null)
+                                        .setContentTitle(title)
+                                        .setAutoCancel(true)
+                                        .setContentIntent(pendingIntent)
+                                        .setContentText(body)
+                                        .setSmallIcon(R.drawable.ic_launcher)
+                                        .setChannelId(channelId);
+
+                        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.notify(0,notificationBuilder.build());
                     }
                     Log.e(TAG, "DownloadBook.onClick() <<");
                 }
