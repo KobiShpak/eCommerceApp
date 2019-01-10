@@ -93,7 +93,7 @@ public class Book implements Parcelable {
 
     public void incrementReviewCount() { reviewsCount++;}
 
-    public void incrementRating(int newRating) { rating+=newRating;}
+    public void incrementRating(int newRating) { rating = (rating + newRating) / reviewsCount;}
 
     public Map<String, Review> getReviews() { return reviews; }
 
