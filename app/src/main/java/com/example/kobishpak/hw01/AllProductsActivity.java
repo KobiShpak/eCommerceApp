@@ -117,7 +117,7 @@ public class AllProductsActivity extends AppCompatActivity {
             pleaseWait();
             DisplayUserInformation();
 
-            if (m_FirebaseUser.getEmail() == null || m_FirebaseUser.getEmail() == "")
+            if (m_FirebaseUser.getDisplayName() == null)//m_FirebaseUser.getEmail() == null || m_FirebaseUser.getEmail() == "")
             {
                 myUser = new User();
                 getAllBooks();

@@ -47,7 +47,7 @@
     <string name="forgot_password_text">Please enter your email\na password reset link will send to you</string>
     <string name="reset_password">Password Reset</string>
     <string name="review_details">[Review Details]</string>
-    <string name="reviewer_mail">[reviewer mail]</string>
+    <string name="reviewer_name">[reviewer mail]</string>
     <string name="book_name">[BOOK NAME]</string>
     <string name="author">[author]</string>
     <string name="genere">[genere]</string>

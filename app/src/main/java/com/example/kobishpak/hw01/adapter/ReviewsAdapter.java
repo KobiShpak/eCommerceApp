@@ -46,7 +46,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
 
         Review review = reviewsList.get(position);
 
-        holder.getUserMail().setText(review.getUserEmail());
+        holder.getUserName().setText(review.getUserName());
         holder.getUserReview().setText(review.getUserReview());
         holder.getUserRating().setRating(review.getUserRating());
 
@@ -62,14 +62,14 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     public class ReviewViewHolder extends RecyclerView.ViewHolder {
 
         private TextView userReview;
-        private TextView userMail;
+        private TextView userName;
         private RatingBar userRating;
 
         public ReviewViewHolder(Context context, View view) {
 
             super(view);
             userReview = view.findViewById(R.id.user_review);
-            userMail =  view.findViewById(R.id.user_mail);
+            userName =  view.findViewById(R.id.user_name);
             userRating = view.findViewById(R.id.user_rating);
 
         }
@@ -82,12 +82,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
             this.userReview = userReview;
         }
 
-        public TextView getUserMail() {
-            return userMail;
+        public TextView getUserName() {
+            return userName;
         }
 
-        public void setUserMail(TextView userMail) {
-            this.userMail = userMail;
+        public void setUserName(TextView userName) {
+            this.userName = userName;
         }
 
         public RatingBar getUserRating() {

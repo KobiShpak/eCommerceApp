@@ -82,9 +82,10 @@ public class BookDetailsActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         key = getIntent().getStringExtra("key");
         book = getIntent().getParcelableExtra("book");
-        user = getIntent().getParcelableExtra("user");
+        user = (User)getIntent().getSerializableExtra("user");
         mBookStorage = FirebaseStorage.getInstance().getReference().child(("Books/"));
         m_AnalyticsManager.init(this);
+        m_AnalyticsManager.trackBookEvent("book_viewed", book);
 
         StorageReference thumbRef = FirebaseStorage
                 .getInstance()
@@ -107,7 +108,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textViewArtist)).setText(book.getArtist());
         ((TextView) findViewById(R.id.textViewGenre)).setText(book.getGenre());
         buy = findViewById(R.id.buttonBuy);
-        if (user.getEmail().isEmpty())
+        if (user.getSignupMethod().equals("anonymousUser"))
         {
             Toast.makeText(BookDetailsActivity.this, "In order to purchase a Book, you must log in first.",Toast.LENGTH_LONG).show();
             buy.setText("Login");
@@ -131,7 +132,7 @@ public class BookDetailsActivity extends AppCompatActivity {
 
                 Log.e(TAG, "buy.onClick() >> file=" + book.getName());
 
-                if (!user.getEmail().isEmpty()) { ///////////////////
+                if (!user.getSignupMethod().equals("anonymousUser")) { ///////////////////
                     if (bookWasPurchased) {
                         Log.e(TAG, "buy.onClick() >> Downloading purchased book");
                         //User purchased the book so he can download it
@@ -227,7 +228,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     }
 
     private void logBookEvent(String event){
-        m_AnalyticsManager.trackBookEvent(event, book);
+        m_AnalyticsManager.trackBookAcquiredEvent(event, book);
     }
 
     @Override

@@ -16,6 +16,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -39,6 +41,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
@@ -59,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView m_ForgotPasswordText;
     private TextView m_SignInAnonymouslyText;
     private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
+    private String m_Email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
 
-                LoginWithFacebook(loginResult.getAccessToken());
+                LoginWithFacebook(loginResult.getAccessToken(), loginResult);
             }
 
             @Override
@@ -228,9 +233,25 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void LoginWithFacebook(AccessToken token) {
+    private void LoginWithFacebook(AccessToken token, LoginResult loginResult) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
+        GraphRequest request = GraphRequest.newMeRequest(
+                loginResult.getAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.v("LoginActivity", response.toString());
+                        // Application code
+                        try {
+                            String email = object.getString("email");
+                            m_Email = email;
+                        }
+                        catch(Exception e)
+                        {
 
+                        }
+                    }
+                });
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -286,8 +307,8 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(TAG, "createNewUser() << Error user is null");
             return;
         }
-        userRef.child(user.getUid()).setValue(new User(user.getEmail(),0,
-                0,null,signupMethod));
+        userRef.child(user.getUid()).setValue(new User(user.getDisplayName(),m_Email,0,
+                0,null, signupMethod));
 
         m_AnalyticsManager.trackSignupEvent(signupMethod);
 

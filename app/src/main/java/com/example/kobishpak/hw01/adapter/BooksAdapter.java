@@ -22,6 +22,10 @@ import com.example.kobishpak.hw01.model.Book;
 import com.example.kobishpak.hw01.model.User;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -34,6 +38,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
     private List<BookWithKey> booksList;
     private User user;
     private int m_Discount = 0;
+    private FirebaseAuth m_FirebaseAuth = FirebaseAuth.getInstance();
 
     public BooksAdapter(List<BookWithKey> booksList, User user, int i_Discount) {
         this.m_Discount = i_Discount;
@@ -152,7 +157,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.BookViewHold
             bookCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Log.e(TAG, "CardView.onClick() >> name=" + selectedBook.getName());
 
                     Context context = view.getContext();
