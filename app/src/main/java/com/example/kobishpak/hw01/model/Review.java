@@ -10,12 +10,21 @@ import java.util.Map;
 public class Review {
     private String userReview;
     private int userRating;
-    private String userEmail;
 
-    public Review(String userReview, int userRating, String userEmail) {
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    private String userName;
+
+    public Review(String userReview, int userRating, String userName) {
         this.userReview = userReview;
         this.userRating = userRating;
-        this.userEmail = userEmail;
+        this.userName = userName;
     }
 
     public Review() {
@@ -29,9 +38,6 @@ public class Review {
         return userRating;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
 
 
     @Exclude
@@ -40,7 +46,7 @@ public class Review {
         HashMap<String, Object> result = new HashMap<>();
         result.put("userReview", userReview);
         result.put("userRating", userRating);
-        result.put("userEmail", userEmail);
+        result.put("userName", userName);
         return result;
     }
 

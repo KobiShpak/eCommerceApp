@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent splashScreenIntent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(splashScreenIntent);
                     finish();
-                    //     }
+//                }
             }
         }, SPLASH_SCREEN_TIME_OUT);
     }

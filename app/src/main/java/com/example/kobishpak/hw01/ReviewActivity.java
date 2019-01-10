@@ -53,7 +53,7 @@ public class ReviewActivity extends Activity {
 
         key = getIntent().getStringExtra("key");
         book = getIntent().getParcelableExtra("book");
-        user = getIntent().getParcelableExtra("user");
+        user = (User)getIntent().getSerializableExtra("user");
 
         userReview = findViewById(R.id.new_user_review);
         userRating = findViewById(R.id.new_user_rating);
@@ -138,7 +138,7 @@ public class ReviewActivity extends Activity {
                     Review review = new Review(
                             userReview.getText().toString(),
                             (int)userRating.getRating(),
-                            user.getEmail());
+                            user.getName());
 
                     bookRef.child("/reviews/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(review);
                     m_AnalyticsManager.trackBookRating(book, (int)userRating.getRating());

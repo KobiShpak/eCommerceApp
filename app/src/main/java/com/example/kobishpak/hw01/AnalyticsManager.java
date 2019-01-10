@@ -76,6 +76,27 @@ public class AnalyticsManager {
         mMixpanel.trackMap(eventName,eventParams2);
     }
 
+    public void trackBookAcquiredEvent(String event , Book book) {
+        Bundle params = new Bundle();
+
+        params.putString("book_genre", book.getGenre());
+        params.putString("book_name", book.getName());
+        params.putString("book_author", book.getArtist());
+        params.putDouble("book_price",book.getPrice());
+        params.putDouble("book_rating",book.getRating());
+
+        mFirebaseAnalytics.logEvent(event,params);
+
+        //Mixpanel
+        Map<String, Object> eventParams2 = new HashMap<>();
+        eventParams2.put("book_genre", book.getGenre());
+        eventParams2.put("book_name", book.getName());
+        eventParams2.put("book_author", book.getArtist());
+        eventParams2.put("book_price",String.valueOf(book.getPrice()));
+        eventParams2.put("book_rating",String.valueOf(book.getRating()));
+        mMixpanel.trackMap(event, eventParams2);
+    }
+
     public void trackBookEvent(String event , Book book) {
         Bundle params = new Bundle();
 

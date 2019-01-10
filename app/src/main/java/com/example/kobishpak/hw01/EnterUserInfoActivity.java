@@ -309,9 +309,8 @@ public class EnterUserInfoActivity extends AppCompatActivity {
                             }
 
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                            userRef.child(user.getUid()).setValue(new User(user.getEmail(),0,
+                            userRef.child(user.getUid()).setValue(new User(m_FullNameEditText.getText().toString(), m_EmailEditText.getText().toString(),0,
                                     0,null,"inAppRegister"));
-
                             Toast.makeText(EnterUserInfoActivity.this, "Successfully registered", Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
 

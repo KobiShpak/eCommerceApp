@@ -4,11 +4,13 @@ package com.example.kobishpak.hw01.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User implements Parcelable {
+public class User implements Serializable {
 
+    private String name;
     private String email;
     private int totalPurchase;
     private int booksCount;
@@ -16,10 +18,15 @@ public class User implements Parcelable {
     private String signupMethod;
 
     public User() {
+        this.name = "Guest";
         this.email = "";
+        this.totalPurchase = 0;
+        this.booksCount = 0;
+        this.signupMethod = "anonymousUser";
     }
 
-    public User(String email, int booksCount, int totalPurchase, List<String> myBooks, String signupMethod) {
+    public User(String name, String email, int booksCount, int totalPurchase, List<String> myBooks, String signupMethod) {
+        this.name = name;
         this.email = email;
         this.totalPurchase = totalPurchase;
         this.booksCount = booksCount;
@@ -27,6 +34,13 @@ public class User implements Parcelable {
         this.signupMethod = signupMethod;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     public String getEmail() {
         return email;
     }
@@ -35,39 +49,15 @@ public class User implements Parcelable {
         return myBooks;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(email);
-        parcel.writeList(myBooks);
-    }
-
-    public User(Parcel in) {
-        this.email = in.readString();
-        in.readList(myBooks,String.class.getClassLoader());
-    }
-
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel source) {
-            return new User(source);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
     public void updatePurchaseStatus(int purchaseFee)
     {
-        this.booksCount++;
+        this.booksCount += 1;
         this.totalPurchase += purchaseFee;
+    }
+
+    public String getSignupMethod()
+    {
+        return this.signupMethod;
     }
 
     public int getTotalPurchase() {
@@ -76,5 +66,33 @@ public class User implements Parcelable {
 
     public int getMyBooksCount() {
         return this.booksCount;
+    }
+
+    public int getBooksCount() {
+        return booksCount;
+    }
+
+//    public static Creator<User> getCREATOR() {
+//        return CREATOR;
+//    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTotalPurchase(int totalPurchase) {
+        this.totalPurchase = totalPurchase;
+    }
+
+    public void setBooksCount(int booksCount) {
+        this.booksCount = booksCount;
+    }
+
+    public void setMyBooks(List<String> myBooks) {
+        this.myBooks = myBooks;
+    }
+
+    public void setSignupMethod(String signupMethod) {
+        this.signupMethod = signupMethod;
     }
 }
