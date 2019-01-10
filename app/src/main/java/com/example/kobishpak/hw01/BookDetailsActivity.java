@@ -56,7 +56,7 @@ public class BookDetailsActivity extends AppCompatActivity {
     private Book book;
     private String key;
     private User user;
-
+    private int price;
     private Button buy;
     private Button mReviewButton;
     private RecyclerView recyclerViewBookReviews;
@@ -114,7 +114,8 @@ public class BookDetailsActivity extends AppCompatActivity {
             buy.setText("Login");
         }
         else {
-            buy.setText("BUY $" + book.getPrice());
+            price = book.getPrice() - getIntent().getIntExtra("discount",0);
+            buy.setText("BUY $" + price);
         }
         Iterator i = user.getMyBooks().iterator();
         while (i.hasNext()) {
@@ -146,7 +147,7 @@ public class BookDetailsActivity extends AppCompatActivity {
                         //Purchase the book.
                         Log.e(TAG, "buy.onClick() >> Purchase the book");
                         user.getMyBooks().add(key);
-                        user.updatePurchaseStatus(book.getPrice());
+                        user.updatePurchaseStatus(price);
                         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
                         userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
                         bookWasPurchased = true;
